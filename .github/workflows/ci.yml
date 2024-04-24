@@ -36,6 +36,10 @@ jobs:
         uses: docker/metadata-action@v5.5.1
         with:
           images: ghcr.io/${{ github.repository }}/lcpserver
+          tags: |
+            latest
+            type=sha
+            type=ref,event=branch
       - name: Build LCPServer
         uses: docker/build-push-action@v5.3.0
         with:
