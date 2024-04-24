@@ -28,16 +28,16 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: nota-ci
-          password: ${{ secrets.GH_PACKAGES_WRITE }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       # Build lcpserver
       - name: Extract image metadata
         id: meta
-        uses: docker/metadata-action@v5.0.0
+        uses: docker/metadata-action@v5.5.1
         with:
           images: ghcr.io/${{ github.repository }}/lcpserver
       - name: Build LCPServer
-        uses: docker/build-push-action@v5.0.0
+        uses: docker/build-push-action@v5.3.0
         with:
           context: "."
           file: "./docker/lcp/Dockerfile"
