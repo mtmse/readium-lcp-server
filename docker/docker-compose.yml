@@ -1,0 +1,30 @@
+services:
+  lcpserver:
+    restart: unless-stopped
+    build:
+      context: ../
+      dockerfile: docker/lcp/Dockerfile
+    image: ghcr.io/notalib/readium-lcp-server/lcpserver:${TAG:-latest}
+    #environment:
+    volumes:
+      - ./config.yaml:/app/config.yaml
+      - ./htpasswd:/app/htpasswd
+      - ./cert:/app/cert
+      # i18n ?
+    ports:
+      - 8989
+  lsdserver:
+    restart: unless-stopped
+    build:
+      context: ../
+      dockerfile: docker/lcp/Dockerfile
+    image: ghcr.io/notalib/readium-lcp-server/lsdserver:${TAG:-latest}
+    command: ["/app/lsdserver"]
+    #environment:
+    volumes:
+      - ./config.yaml:/app/config.yaml
+      - ./htpasswd:/app/htpasswd
+      - ./cert:/app/cert
+      # i18n ?
+    ports:
+      - 8990
