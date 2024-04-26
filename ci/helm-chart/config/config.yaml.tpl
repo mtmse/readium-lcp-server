@@ -1,23 +1,13 @@
-# Test configuration for lcpserver and lsdserver.
-# It is meant to be used as a quick-start setup.
-#
-# Replace every occurence of <LCP_SERVER>:<PORT> by the License Server host name or IP address + port.
-# Replace every occurence of <LSD_SERVER> by the Status Server host name.
-# Replace every occurence of <GATEWAY> by the License Gateway host name.
-# Replace every occurence of <LCP_HOME> by the absolute path to the folder hosting every file associated with the LCP service.
-
-# Shared configuration
-
 # The usernames and passwords must match the ones in the htpasswd files for each server.
 lcp_update_auth:
     # login and password used by the Status Server to access the License Server
-    username: "admin"
-    password: "Test1234"
+    username: "{{ .Values.auth.username }}"
+    password: "{{ .Values.auth.password }}"
 
 lsd_notify_auth:
     # login and password used by the License Server to access the Status Server
-    username: "admin"
-    password: "Test1234"
+    username: "{{ .Values.auth.username }}"
+    password: "{{ .Values.auth.password }}"
 
 # LCP Server
 
@@ -25,27 +15,28 @@ profile: "basic"
 lcp:
     host: "127.0.0.1"
     # the public url a client app will use to access the License Server (optional)
-    public_base_url:  "http://127.0.0.1:8989"
+    public_base_url:  "{{ .Values.lcp.public_base_url }}"
     # the port on which the License Server will be running
     port: 8989
     # replace this dsn if you're not using SQLite
-    database: "sqlite3://file:/data/db/lcp.sqlite?cache=shared&mode=rwc"
+    database: "{{ .Values.lcp.database }}"
     # authentication file of the License Server. Here we use the same file for the License Server and Status Server
     auth_file: "/app/htpasswd"
-# uncomment if lcpencrypt does not manage the storage of encrypted publications
+{{- if .Values.storage.enabled }}
 storage:
    filesystem:
        directory: "/data/files/storage"
+{{- end }}
 certificate:
     # theses test certificates are provided in the test/cert folder of the codebase
-    cert: "/app/cert/cert-edrlab-test.pem"
-    private_key: "/app/cert/privkey-edrlab-test.pem"
+    cert: "/app/cert/cert.pem"
+    private_key: "/app/cert/privkey.pem"
 license:
     links:
         # leave the url as-is (after <LSD_SERVER> has been resolved)
-        status: "http://localhost:8990/licenses/{license_id}/status"
+        status: {{ default ( tpl "{{ .Values.lsd.public_base_url }}/licenses/{license_id}/status" . ) .Values.links.status | quote }}
         # the url of a REAL html page, that indicates how the user can get back his passphrase if forgotten
-        hint: "https://localhost/lcp-hint"
+        hint: "{{ .Values.links.hint }}"
 
 
 # LSD Server
@@ -53,34 +44,17 @@ license:
 lsd:
     host: "127.0.0.1"
     # the public url a client app will use to access the Status Server
-    public_base_url:  "http://127.0.0.1:8990"
+    public_base_url:  "{{ .Values.lsd.public_base_url }}"
     # the port on which the Status Server will be running
     port: 8990
     # replace this dsn if you're not using SQLite
-    database: "sqlite3://file:/data/db/lsd.sqlite?cache=shared&mode=rwc"
+    database: "{{ .Values.lsd.database }}"
     # authentication file of the Status Server. Here we use the same file for the License Server and Status Server
     auth_file: "/app/htpasswd"
     # in this example, the License Gateway is developed so that adding a license id
     # to the host name gives access to a fresh license.
     # Keep {license_id} as-is; this is a template.
     # Read the doc to know more about how to develop a License Gateway.
-    license_link_url: "http://localhost:8990/{license_id}"
-license_status:
-    register: true
-    # uncomment the lines below if you're allowing e-lending
-    renew: true
-    return: true
-    renting_days: 30
-    renew_days: 7
+    license_link_url: {{ default ( tpl "{{ .Values.lsd.public_base_url }}/{license_id}" . ) .Values.links.license | quote }}
 
-# Testing Frontend (not used yet)
-
-frontend:
-    host: "127.0.0.1"
-    port: 8991
-    database: "sqlite3://file:/data/db/frontend.sqlite?cache=shared&mode=rwc"
-    master_repository: "/data/files/master"
-    encrypted_repository: "/data/files/encrypted"
-    provider_uri: "https://localhost/download/"
-    right_print: 10
-    right_copy: 2000
+{{ toYaml .Values.license_status }}

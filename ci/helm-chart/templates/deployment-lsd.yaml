@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    workload.user.cattle.io/workloadselector: apps.deployment-{{ .Release.Namespace }}-lsdserver
+  name: lsdserver
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      workload.user.cattle.io/workloadselector: apps.deployment-{{ .Release.Namespace }}-lsdserver
+  template:
+    metadata:
+      labels:
+        workload.user.cattle.io/workloadselector: apps.deployment-{{ .Release.Namespace }}-lsdserver
+      namespace: {{ .Release.Namespace }}
+    spec:
+      containers:
+      - name: lsdserver
+        image: ghcr.io/notalib/readium-lcp-server/lsdserver:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8990
+          name: http
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /app/config.yaml
+          name: lcp-config
+          readOnly: true
+          subPath: config.yaml
+        - mountPath: /app/cert
+          name: lcp-certs
+          readOnly: true
+        - mountPath: /app/htpasswd
+          name: lcp-config
+          subPath: htpasswd
+        - mountPath: /data/db
+          name: lcp-data
+          subPath: db
+      imagePullSecrets:
+      - name: github-container-registry
+      volumes:
+      - name: lcp-config
+        secret:
+          defaultMode: 420
+          optional: false
+          secretName: lcp-config
+      - name: lcp-certs
+        secret:
+          defaultMode: 420
+          optional: false
+          secretName: lcp-certs
+      - name: lcp-data
+        persistentVolumeClaim:
+          claimName: pvc-lcp-data

@@ -13,7 +13,7 @@ debug
 !test/config.yaml
 !test/config.localhost.yaml
 !ci/htpasswd
-!ci/*.yaml
+!ci/**/*.yaml
 **/manage/config.js
 frontend/manage/node_modules/*
 frontend/manage/dist/*

@@ -1,0 +1,34 @@
+lcp:
+  public_base_url: "https://lcp.localhost"
+  database: "sqlite3://file:/data/db/lcp.sqlite?cache=shared&mode=rwc"
+  handle_storage: false
+
+lsd:
+  public_base_url: "https://lsd.localhost"
+  database: "sqlite3://file:/data/db/lsd.sqlite?cache=shared&mode=rwc"
+  license_link_url:
+
+auth:
+  username: "admin"
+  password: "Test1234"
+
+links:
+  hint: https://localhost/lcp-hint
+  # defaults to LSD endpoints if nothing provided
+  license:
+  status:
+
+storage:
+  enabled: true
+  requestSize: 1Gi
+  storageClass: local-path
+  accessModes:
+  - ReadWriteOnce
+
+license_status:
+  register: true
+  # uncomment the lines below if you're allowing e-lending
+  # renew: true
+  # return: true
+  # renting_days: 30
+  # renew_days: 7
