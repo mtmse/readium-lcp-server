@@ -11,6 +11,9 @@ debug
 *.exe
 *.yaml
 !test/config.yaml
+!test/config.localhost.yaml
+!ci/htpasswd
+!ci/*.yaml
 **/manage/config.js
 frontend/manage/node_modules/*
 frontend/manage/dist/*
