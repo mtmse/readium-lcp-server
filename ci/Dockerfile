@@ -44,6 +44,7 @@ CMD ["/app/lcpserver"]
 # Runtime image (LSD) #
 #######################
 FROM runtime-lcp as runtime-lsd
+LABEL org.opencontainers.image.source https://github.com/notalib/readium-lcp-server
 
 EXPOSE 8990
 CMD ["/app/lsdserver"]
