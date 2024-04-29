@@ -40,7 +40,7 @@ jobs:
             latest
             type=sha
             type=ref,event=branch
-      - name: Build LCPServer
+      - name: Build LCP Server
         uses: docker/build-push-action@v5.3.0
         with:
           context: "."
@@ -56,12 +56,12 @@ jobs:
         id: meta_lsd
         uses: docker/metadata-action@v5.5.1
         with:
-          images: ghcr.io/${{ github.repository }}/lcpserver
+          images: ghcr.io/${{ github.repository }}/lsdserver
           tags: |
             latest
             type=sha
             type=ref,event=branch
-      - name: Build LCPServer
+      - name: Build LSD Server
         uses: docker/build-push-action@v5.3.0
         with:
           context: "."
