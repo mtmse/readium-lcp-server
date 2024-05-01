@@ -55,6 +55,6 @@ lsd:
     # to the host name gives access to a fresh license.
     # Keep {license_id} as-is; this is a template.
     # Read the doc to know more about how to develop a License Gateway.
-    license_link_url: {{ default ( tpl "{{ .Values.lsd.public_base_url }}/{license_id}" . ) .Values.links.license | quote }}
+    license_link_url: {{ default ( tpl "{{ .Values.lcp.public_base_url }}/licenses/{license_id}" . ) .Values.links.license | quote }}
 
 {{ toYaml .Values.license_status }}

@@ -14,8 +14,10 @@ auth:
 
 links:
   hint: https://localhost/lcp-hint
-  # defaults to LSD endpoints if nothing provided
+  # should be set to the LCP license gateway URL with {license_id} templated in.
+  # defaults to LCP license endpoint if nothing provided, for testing purposes!
   license:
+  # defaults to LSD license status endpoint if nothing provided
   status:
 
 storage:
