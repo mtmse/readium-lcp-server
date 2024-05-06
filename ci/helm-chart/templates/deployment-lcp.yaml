@@ -29,9 +29,9 @@ spec:
           name: lcp-config
           readOnly: true
           subPath: config.yaml
-        - mountPath: /app/htpasswd
+        - mountPath: /app/.htpasswd
           name: lcp-config
-          subPath: htpasswd
+          subPath: .htpasswd
           readOnly: true
 {{- if .Values.edrlab.prodCertSecretName }}
         - mountPath: /app/cert

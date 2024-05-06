@@ -21,7 +21,7 @@ lcp:
     # replace this dsn if you're not using SQLite
     database: "{{ .Values.lcp.database }}"
     # authentication file of the License Server. Here we use the same file for the License Server and Status Server
-    auth_file: "/app/htpasswd"
+    auth_file: "/app/.htpasswd"
 {{- if .Values.storage.enabled }}
 storage:
    filesystem:

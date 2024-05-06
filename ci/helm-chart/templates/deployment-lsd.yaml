@@ -34,9 +34,9 @@ spec:
           name: lcp-prod-certs
           readOnly: true
 {{- end }}
-        - mountPath: /app/htpasswd
+        - mountPath: /app/.htpasswd
           name: lcp-config
-          subPath: htpasswd
+          subPath: .htpasswd
         - mountPath: /data/db
           name: lcp-data
           subPath: db
