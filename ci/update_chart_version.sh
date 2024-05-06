@@ -16,3 +16,5 @@ fi
 
 yq eval ".appVersion = \"$APP_VERSION\"" -i helm-chart/Chart.yaml
 yq eval ".version = \"$APP_VERSION\"" -i helm-chart/Chart.yaml
+
+echo $APP_VERSION
