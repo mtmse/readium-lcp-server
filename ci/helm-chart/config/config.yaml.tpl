@@ -50,7 +50,7 @@ lsd:
     # replace this dsn if you're not using SQLite
     database: "{{ .Values.lsd.database }}"
     # authentication file of the Status Server. Here we use the same file for the License Server and Status Server
-    auth_file: "/app/htpasswd"
+    auth_file: "/app/.htpasswd"
     # in this example, the License Gateway is developed so that adding a license id
     # to the host name gives access to a fresh license.
     # Keep {license_id} as-is; this is a template.
