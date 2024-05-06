@@ -7,11 +7,10 @@ services:
       target: runtime-lcp
     image: ghcr.io/notalib/readium-lcp-server/lcpserver:${TAG:-latest}
     #environment:
-    volumes:
-      - ./htpasswd:/app/htpasswd
+    #volumes:
       # i18n ?
     ports:
-      - 8989
+      - 8989:8989
   lsdserver:
     restart: unless-stopped
     build:
@@ -20,8 +19,7 @@ services:
       target: runtime-lsd
     image: ghcr.io/notalib/readium-lcp-server/lsdserver:${TAG:-latest}
     #environment:
-    volumes:
-      - ./htpasswd:/app/htpasswd
+    #volumes:
       # i18n ?
     ports:
-      - 8990
+      - 8990:8990
