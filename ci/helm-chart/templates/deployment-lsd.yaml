@@ -29,9 +29,11 @@ spec:
           name: lcp-config
           readOnly: true
           subPath: config.yaml
+{{- if .Values.edrlab.prodCertSecretName }}
         - mountPath: /app/cert
-          name: lcp-certs
+          name: lcp-prod-certs
           readOnly: true
+{{- end }}
         - mountPath: /app/htpasswd
           name: lcp-config
           subPath: htpasswd
@@ -46,11 +48,13 @@ spec:
           defaultMode: 420
           optional: false
           secretName: lcp-config
-      - name: lcp-certs
-        secret:
-          defaultMode: 420
-          optional: false
-          secretName: lcp-certs
       - name: lcp-data
         persistentVolumeClaim:
           claimName: pvc-lcp-data
+{{- if .Values.edrlab.prodCertSecretName }}
+      - name: lcp-prod-certs
+        secret:
+          defaultMode: 420
+          optional: false
+          secretName: {{ .Values.edrlab.prodCertSecretName }}
+{{- end }}

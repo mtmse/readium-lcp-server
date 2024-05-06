@@ -29,8 +29,8 @@ storage:
 {{- end }}
 certificate:
     # theses test certificates are provided in the test/cert folder of the codebase
-    cert: "/app/cert/cert.pem"
-    private_key: "/app/cert/privkey.pem"
+    cert: "/app/cert/edrlab.crt"
+    private_key: "/app/cert/edrlab.key"
 license:
     links:
         # leave the url as-is (after <LSD_SERVER> has been resolved)

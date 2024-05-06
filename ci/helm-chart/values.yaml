@@ -34,3 +34,7 @@ license_status:
   # return: true
   # renting_days: 30
   # renew_days: 7
+
+# define this when production certs are in an existing secret with keys edrlab.crt & edrlab.key for each file.
+edrlab:
+  prodCertSecretName:

@@ -38,7 +38,8 @@ RUN mkdir -p /data/db && \
 COPY --from=builder --chown=$UID:$GID /lcp/build/bin /app
 
 # Copy in default localhost config and certs (override with volume-mapping at runtime).
-COPY test/cert /app/cert
+COPY test/cert/cert-edrlab-test.pem /app/cert/edrlab.crt
+COPY test/cert/privkey-edrlab-test.pem /app/cert/edrlab.key
 COPY test/config.localhost.yaml /app/config.yaml
 COPY test/.htpasswd /app/.htpasswd
 
