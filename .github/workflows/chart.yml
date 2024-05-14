@@ -2,8 +2,10 @@ name: publish helm chart
 
 on:
   workflow_dispatch:
-  push:
-    branches: ["ci"]
+  workflow_run:
+    workflows: ["build & publish"]
+    types:
+      - completed
 
 jobs:
   chart:
