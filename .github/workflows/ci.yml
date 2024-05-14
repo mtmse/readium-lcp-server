@@ -29,6 +29,11 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: nota-ci
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get version
+        id: version
+        run: |
+          APP_VERSION=$(grep "Software_Version = "$1"" $GIT_ROOT/api/common_server.go | awk '{print $3}' | sed 's/"//g')
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
 
       # Build lcpserver
       - name: Extract image metadata
@@ -40,6 +45,7 @@ jobs:
             latest
             type=sha
             type=ref,event=branch
+            ${{ steps.version.outputs.APP_VERSION }}
       - name: Build LCP Server
         uses: docker/build-push-action@v5.3.0
         with:
@@ -61,6 +67,7 @@ jobs:
             latest
             type=sha
             type=ref,event=branch
+            ${{ steps.version.outputs.APP_VERSION }}
       - name: Build LSD Server
         uses: docker/build-push-action@v5.3.0
         with:
