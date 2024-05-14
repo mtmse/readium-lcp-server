@@ -32,7 +32,7 @@ jobs:
       - name: Get version
         id: version
         run: |
-          APP_VERSION=$(grep "Software_Version = "$1"" $GIT_ROOT/api/common_server.go | awk '{print $3}' | sed 's/"//g')
+          APP_VERSION=$(grep "Software_Version = " api/common_server.go | awk '{print $3}' | sed 's/"//g')
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
 
       # Build lcpserver

@@ -5,7 +5,7 @@ set -e
 GIT_ROOT="$(git rev-parse --show-toplevel)"
 
 # Retrieve the version from api/common_server.go
-APP_VERSION=$(grep "Software_Version = "$1"" $GIT_ROOT/api/common_server.go | awk '{print $3}' | sed 's/"//g')
+APP_VERSION=$(grep "Software_Version = " $GIT_ROOT/api/common_server.go | awk '{print $3}' | sed 's/"//g')
 
 if [ -z "$APP_VERSION" ]; then
   echo "Error: Could not find version in api/common_server.go"
