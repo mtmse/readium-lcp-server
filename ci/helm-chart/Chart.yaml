@@ -6,5 +6,5 @@ home: https://github.com/notalib/readium-lcp-server
 keywords:
   - "lcp"
   - "readium"
-version: "1.9.2"
+version: "1.9.2-fix1"
 appVersion: "1.9.2"

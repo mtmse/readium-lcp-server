@@ -57,4 +57,5 @@ lsd:
     # Read the doc to know more about how to develop a License Gateway.
     license_link_url: {{ default ( tpl "{{ .Values.lcp.public_base_url }}/licenses/{license_id}" . ) .Values.links.license | quote }}
 
-{{ toYaml .Values.license_status }}
+license_status:
+{{ toYaml .Values.license_status | indent 2 }}
