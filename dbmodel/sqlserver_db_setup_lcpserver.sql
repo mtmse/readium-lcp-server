@@ -14,7 +14,7 @@ CREATE TABLE license (
     issued datetime NOT NULL,
     updated datetime DEFAULT NULL,
     rights_print smallint DEFAULT NULL,
-    rights_copy smallint DEFAULT NULL,
+    rights_copy int DEFAULT NULL,
     rights_start datetime DEFAULT NULL,
     rights_end datetime DEFAULT NULL,
     content_fk varchar(255) NOT NULL,
