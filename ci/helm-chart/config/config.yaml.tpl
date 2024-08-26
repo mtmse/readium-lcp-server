@@ -11,7 +11,7 @@ lsd_notify_auth:
 
 # LCP Server
 
-profile: "basic"
+profile: "{{ .Values.profile }}"
 lcp:
     host: "127.0.0.1"
     # the public url a client app will use to access the License Server (optional)
@@ -29,8 +29,8 @@ storage:
 {{- end }}
 certificate:
     # theses test certificates are provided in the test/cert folder of the codebase
-    cert: "/app/cert/edrlab.crt"
-    private_key: "/app/cert/edrlab.key"
+    cert: "/app/cert/{{ .Values.certName }}.crt"
+    private_key: "/app/cert/{{ .Values.certName }}.key"
 license:
     links:
         # leave the url as-is (after <LSD_SERVER> has been resolved)

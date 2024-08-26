@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: lcpserver
-        image: ghcr.io/notalib/readium-lcp-server/lcpserver:latest
+        image: ghcr.io/notalib/readium-lcp-server/lcpserver:{{ .Values.imageTag }}
         imagePullPolicy: Always
         ports:
         - containerPort: 8989
@@ -33,7 +33,7 @@ spec:
           name: lcp-config
           subPath: .htpasswd
           readOnly: true
-{{- if .Values.edrlab.prodCertSecretName }}
+{{- if .Values.production.certSecretName }}
         - mountPath: /app/cert
           name: lcp-prod-certs
           readOnly: true
@@ -45,7 +45,7 @@ spec:
           name: lcp-data
           subPath: files
       imagePullSecrets:
-      - name: github-container-registry
+        - name: {{ .Values.imagePullSecret }}
       volumes:
       - name: lcp-config
         secret:
@@ -55,10 +55,10 @@ spec:
       - name: lcp-data
         persistentVolumeClaim:
           claimName: pvc-lcp-data
-{{- if .Values.edrlab.prodCertSecretName }}
+{{- if .Values.production.certSecretName }}
       - name: lcp-prod-certs
         secret:
           defaultMode: 420
           optional: false
-          secretName: {{ .Values.edrlab.prodCertSecretName }}
+          secretName: {{ .Values.production.certSecretName }}
 {{- end }}
