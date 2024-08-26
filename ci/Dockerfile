@@ -49,7 +49,8 @@ COPY test/cert/privkey-edrlab-test.pem /app/cert/edrlab.key
 COPY test/config.localhost.yaml /app/config.yaml
 COPY test/.htpasswd /app/.htpasswd
 
-# RUN ls -al /app && sleep 600
+# Update CA certificates
+RUN apt-get update && apt-get -y install ca-certificates && apt-get clean
 
 # Run as non-root LCP user
 USER lcp
