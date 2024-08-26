@@ -1,7 +1,7 @@
 ###############
 # Build image #
 ###############
-FROM golang:1.22-bookworm as builder
+FROM golang:1.22-bookworm AS builder
 
 WORKDIR /lcp
 
@@ -14,8 +14,11 @@ RUN apt-get update && apt-get -y install build-essential && apt-get clean
 # Needed for sqlite3 lib
 ENV CGO_CFLAGS="-D_LARGEFILE64_SOURCE"
 ENV CGO_ENABLED=1
-ENV GOOS=linux
-ENV GOARCH=amd64
+
+# Must be defined as ARG first to use. Inspiration from https://www.docker.com/blog/faster-multi-platform-builds-dockerfile-cross-compilation-guide/
+ARG TARGETOS TARGETARCH
+ENV GOOS=${TARGETOS}
+ENV GOARCH=${TARGETARCH}
 
 RUN go build -o $GOPATH/bin/ ./lcpserver
 RUN go build -o $GOPATH/bin/ ./lsdserver
@@ -24,7 +27,7 @@ RUN go build -o $GOPATH/bin/ ./lcpencrypt
 #######################
 # Runtime image (LCP) #
 #######################
-FROM debian:bookworm-slim as runtime-lcp
+FROM debian:bookworm-slim AS runtime-lcp
 LABEL org.opencontainers.image.source https://github.com/notalib/readium-lcp-server
 WORKDIR /app
 
@@ -59,7 +62,7 @@ CMD ["/app/lcpserver"]
 #######################
 # Runtime image (LSD) #
 #######################
-FROM runtime-lcp as runtime-lsd
+FROM runtime-lcp AS runtime-lsd
 LABEL org.opencontainers.image.source https://github.com/notalib/readium-lcp-server
 
 # Mounted config.yaml decides which ports to use. This is the default from config.localhost.yml.
