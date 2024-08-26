@@ -29,8 +29,8 @@ storage:
 {{- end }}
 certificate:
     # theses test certificates are provided in the test/cert folder of the codebase
-    cert: "/app/cert/{{ .Values.certName }}.crt"
-    private_key: "/app/cert/{{ .Values.certName }}.key"
+    cert: "/app/cert/{{ .Values.production.certName }}.crt"
+    private_key: "/app/cert/{{ .Values.production.certName }}.key"
 license:
     links:
         # leave the url as-is (after <LSD_SERVER> has been resolved)

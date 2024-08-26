@@ -22,13 +22,13 @@ docker compose up -d
 Simple config for local testing. Assumes you will expose ports 8989-8990 on localhost.
 
 #### htpasswd
-Placeholder htpasswd is just `admin` as username and `Test1234` as password.
+Placeholder .htpasswd is just `admin` as username and `Test1234` as password.
 
 ### Overriding with volumes
 
 You should not run the default config in production. To change the config, simply use volume mounts to override the following files:
 * `/app/config.yaml`
-* `/app/htpasswd`
+* `/app/.htpasswd`
 * `/app/certs`
 
 Basically the config.yaml decides the location of all other files and which ports to use, so modify it wisely.

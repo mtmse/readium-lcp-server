@@ -1,2 +1,3 @@
 ci
-!ci/htpasswd
+!test/.htpasswd
+!license/libuserkey.a
