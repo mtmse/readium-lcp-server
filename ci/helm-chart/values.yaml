@@ -17,7 +17,6 @@ lcp:
 lsd:
   public_base_url: "https://lsd.localhost"
   database: "sqlite3://file:/data/db/lsd.sqlite?cache=shared&mode=rwc"
-  license_link_url:
 
 auth:
   username: "admin"
