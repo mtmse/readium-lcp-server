@@ -31,6 +31,13 @@ FROM debian:bookworm-slim AS runtime-lcp
 LABEL org.opencontainers.image.source https://github.com/notalib/readium-lcp-server
 WORKDIR /app
 
+RUN apt update && apt install tzdata -y && apt clean
+
+# To avoid .NET Culture issues, define Danish locale.
+ENV TZ="Europe/Copenhagen"
+ENV LANG="en_DK.UTF-8"
+ENV LC_ALL="en_DK.UTF-8"
+
 # Add non-root user
 ARG UID=1001
 ARG GID=1001
