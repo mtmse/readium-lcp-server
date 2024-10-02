@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   nginx:
-    image: lcslsdcontainer.azurecr.io/nginx:latest  # Använd den pushade nginx-bilden i din ACR
+    image: nginx:latest  # Använd den offentliga nginx-bilden från Docker Hub
     ports:
       - "80:80"
     volumes:
