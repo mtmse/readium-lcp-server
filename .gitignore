@@ -28,3 +28,15 @@ lcpencrypt/.DS_Store
 lcpserver/.DS_Store
 npm-debug.log
 manage/config.js
+/.vs
+/.vs/ProjectSettings.json
+/.vs/readium-lcp-servers
+/.vs/readium-lcp-servers/FileContentIndex
+/.vs/readium-lcp-servers/FileContentIndex/19e00367-93b0-4736-8466-d301aa572993.vsidx
+/.vs/readium-lcp-servers/FileContentIndex/4461e0c5-bb5f-4bdc-8b13-ac60e8ae0a91.vsidx
+/.vs/readium-lcp-servers/FileContentIndex/49d223c8-4f60-4aac-a606-a60ea08b791f.vsidx
+/.vs/readium-lcp-servers/FileContentIndex/a1415544-63b7-4449-9a9a-dc7d015fa523.vsidx
+/.vs/readium-lcp-servers/FileContentIndex/d7ab3706-8faf-48d3-90dd-f8af8e53195a.vsidx
+/.vs/readium-lcp-servers/v17
+/.vs/readium-lcp-servers/v17/.wsuo
+/.vs/VSWorkspaceState.json
