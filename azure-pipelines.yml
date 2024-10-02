@@ -78,7 +78,7 @@ stages:
                   inputs:
                     azureSubscription: 'ACR-lcp'  # Din Azure service connection
                     appName: 'LSDLCDserver'  # Din Azure Web App
-                    configurationFile: 'ci/docker-compose-azure.yml'
+                    configurationFile: 'ci/docker-compose-azure.yaml'
 
                 # Steg 3: Deploy Docker Compose till Azure App Service
                 - task: AzureWebAppContainer@1
