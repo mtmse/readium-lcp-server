@@ -17,7 +17,7 @@ stages:
             displayName: Login to ACR
             inputs:
               command: login
-              containerRegistry: 'lcslsdcontainer'  # Namnet på din service connection
+              containerRegistry: 'docker_lcp'  # Namnet på din service connection
 
           - task: Docker@2
             displayName: Build and Push lcpserver
