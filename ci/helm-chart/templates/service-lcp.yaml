@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: lcpserver
+  namespace: lcp
+spec:
+  ports:
+    - name: http
+      port: 8989
+      protocol: TCP
+      targetPort: 8989
+  selector:
+    workload.user.cattle.io/workloadselector: apps.deployment-{{ .Release.Namespace }}-lcpserver
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lsdserver
+  namespace: lcp
+spec:
+  ports:
+    - name: http
+      port: 8990
+      protocol: TCP
+      targetPort: 8990
+  selector:
+    workload.user.cattle.io/workloadselector: apps.deployment-{{ .Release.Namespace }}-lsdserver
+  sessionAffinity: None
+  type: ClusterIP

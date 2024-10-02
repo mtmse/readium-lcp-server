@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    workload.user.cattle.io/workloadselector: apps.deployment-{{ .Release.Namespace }}-lcpserver
+  name: lcpserver
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      workload.user.cattle.io/workloadselector: apps.deployment-{{ .Release.Namespace }}-lcpserver
+  template:
+    metadata:
+      labels:
+        workload.user.cattle.io/workloadselector: apps.deployment-{{ .Release.Namespace }}-lcpserver
+      namespace: {{ .Release.Namespace }}
+    spec:
+      containers:
+      - name: lcpserver
+        image: ghcr.io/notalib/readium-lcp-server/lcpserver:{{ .Values.imageTag }}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8989
+          name: http
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /app/config.yaml
+          name: lcp-config
+          readOnly: true
+          subPath: config.yaml
+        - mountPath: /app/.htpasswd
+          name: lcp-config
+          subPath: .htpasswd
+          readOnly: true
+{{- if .Values.production.certSecretName }}
+        - mountPath: /app/cert
+          name: lcp-prod-certs
+          readOnly: true
+{{- end }}
+        - mountPath: /data/db
+          name: lcp-data
+          subPath: db
+        - mountPath: /data/files
+          name: lcp-data
+          subPath: files
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret }}
+      volumes:
+      - name: lcp-config
+        secret:
+          defaultMode: 420
+          optional: false
+          secretName: lcp-config
+      - name: lcp-data
+        persistentVolumeClaim:
+          claimName: pvc-lcp-data
+{{- if .Values.production.certSecretName }}
+      - name: lcp-prod-certs
+        secret:
+          defaultMode: 420
+          optional: false
+          secretName: {{ .Values.production.certSecretName }}
+{{- end }}

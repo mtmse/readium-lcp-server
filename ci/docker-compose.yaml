@@ -1,0 +1,25 @@
+services:
+  lcpserver:
+    restart: unless-stopped
+    build:
+      context: ../
+      dockerfile: ci/Dockerfile
+      target: runtime-lcp
+    image: ghcr.io/notalib/readium-lcp-server/lcpserver:${TAG:-latest}
+    #environment:
+    #volumes:
+      # i18n ?
+    ports:
+      - 8989:8989
+  lsdserver:
+    restart: unless-stopped
+    build:
+      context: ../
+      dockerfile: ci/Dockerfile
+      target: runtime-lsd
+    image: ghcr.io/notalib/readium-lcp-server/lsdserver:${TAG:-latest}
+    #environment:
+    #volumes:
+      # i18n ?
+    ports:
+      - 8990:8990

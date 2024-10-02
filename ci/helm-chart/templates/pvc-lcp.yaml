@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-lcp-data
+  namespace: lcp
+  annotations:
+    helm.sh/resource-policy: "keep"
+spec:
+  accessModes:
+{{ .Values.storage.accessModes | toYaml | indent 4 }}
+  resources:
+    requests:
+      storage: {{ .Values.storage.requestSize }}
+  storageClassName: {{ .Values.storage.storageClass }}

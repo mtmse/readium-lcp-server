@@ -1,0 +1,46 @@
+imagePullSecret: github-container-registry
+
+profile: "basic"
+imageTag: latest
+
+# define these when production certs are in an existing secret with keys <certName>.crt & <certName>.key for each file.
+production:
+  certSecretName:
+  # the filenames (minus extensions) within above production secret. Testing cert is named edrlab.
+  certName: edrlab
+
+lcp:
+  public_base_url: "https://lcp.localhost"
+  database: "sqlite3://file:/data/db/lcp.sqlite?cache=shared&mode=rwc"
+  handle_storage: false
+
+lsd:
+  public_base_url: "https://lsd.localhost"
+  database: "sqlite3://file:/data/db/lsd.sqlite?cache=shared&mode=rwc"
+
+auth:
+  username: "admin"
+  password: "Test1234"
+
+links:
+  hint: https://localhost/lcp-hint
+  # should be set to the LCP license gateway URL with {license_id} templated in.
+  # defaults to LCP license endpoint if nothing provided, for testing purposes!
+  license:
+  # defaults to LSD license status endpoint if nothing provided
+  status:
+
+storage:
+  enabled: true
+  requestSize: 1Gi
+  storageClass: local-path
+  accessModes:
+  - ReadWriteOnce
+
+license_status:
+  register: true
+  # uncomment the lines below if you're allowing e-lending
+  renew: true
+  return: false
+  renting_days: 30
+  renew_days: 7
