@@ -88,4 +88,4 @@ stages:
                   inputs:
                     azureSubscription: 'ACR-lcp'  # Din Azure service connection
                     appName: 'LSDLCDserver'  # Din Azure Web App
-                    configurationFile: 'ci/docker-compose-azure.yaml'  # Ange rätt sökväg till docker-compose.yml
+                    multicontainerConfigFile: 'ci/docker-compose-azure.yaml'  # Ange rätt sökväg till docker-compose.yml
