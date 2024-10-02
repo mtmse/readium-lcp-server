@@ -15,7 +15,7 @@ stages:
         steps:
           - checkout: self
 
-          # Steg 1: List files för felsökning
+          # Steg 1: Lista filer för felsökning
           - script: ls -R /home/vsts/work/1/s/
             displayName: 'List files in source directory'
 
@@ -35,7 +35,7 @@ stages:
               dockerfile: 'ci/Dockerfile'  # Direkt sökväg till Dockerfile
               tags: |
                 $(tag)
-              buildContext: '.'
+              buildContext: '.'  # Kontexten till byggsteget
 
           # Steg 4: Bygg och pusha lsdserver-bild
           - task: Docker@2
@@ -46,7 +46,7 @@ stages:
               dockerfile: 'ci/Dockerfile'  # Direkt sökväg till Dockerfile
               tags: |
                 $(tag)
-              buildContext: '.'
+              buildContext: '.'  # Kontexten till byggsteget
 
   - stage: Deploy
     displayName: Deploy to Azure App Service
@@ -63,19 +63,28 @@ stages:
               steps:
                 - checkout: self
 
-                # Steg 1: Logga in till Azure
+                # Steg 1: Logga in till Azure (valfritt, användbart för ytterligare konfiguration)
                 - task: AzureCLI@2
                   inputs:
-                    azureSubscription: 'ACR-lcp'  # Kan användas för att referera till din subscription
+                    azureSubscription: 'ACR-lcp'  # Din Azure service connection
                     scriptType: 'bash'
                     scriptLocation: 'inlineScript'
                     inlineScript: |
                       # Om du behöver, logga in till Azure
                       az account show
 
+                # Steg 2: Uppdatera docker-compose-azure.yaml med rätt taggar
+                - task: Bash@3
+                  displayName: 'Update docker-compose-azure.yaml with tag'
+                  inputs:
+                    targetType: 'inline'
+                    script: |
+                      sed -i 's/\${TAG}/'"$(tag)"'/g' ci/docker-compose-azure.yaml
+
+                # Steg 3: Deploy Docker Compose till Azure App Service
                 - task: AzureWebAppContainer@1
                   displayName: 'Deploy Docker Compose to Azure Web App'
                   inputs:
                     azureSubscription: 'ACR-lcp'  # Din Azure service connection
                     appName: 'LSDLCDserver'  # Din Azure Web App
-                    configurationFile: 'ci/docker-compose-azure.yaml'
+                    configurationFile: 'ci/docker-compose-azure.yaml'  # Ange rätt sökväg till docker-compose.yml
