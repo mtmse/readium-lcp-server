@@ -35,7 +35,6 @@ stages:
               dockerfile: 'ci/Dockerfile'  # Direkt sökväg till Dockerfile
               tags: |
                 $(tag)
-              buildContext: 'ci'  # Kontexten till byggsteget
 
           # Steg 4: Bygg och pusha lsdserver-bild
           - task: Docker@2
@@ -46,4 +45,3 @@ stages:
               dockerfile: 'ci/Dockerfile'  # Direkt sökväg till Dockerfile
               tags: |
                 $(tag)
-              buildContext: 'ci'  # Kontexten till byggsteget
