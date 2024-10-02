@@ -80,6 +80,7 @@ stages:
                     targetType: 'inline'
                     script: |
                       sed -i 's/\${TAG}/'"$(tag)"'/g' ci/docker-compose-azure.yaml
+                      cat ci/docker-compose-azure.yaml  # Lägg till detta för att verifiera substitutionen
 
                 # Steg 3: Deploy Docker Compose till Azure App Service
                 - task: AzureWebAppContainer@1
