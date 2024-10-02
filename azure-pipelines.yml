@@ -31,17 +31,19 @@ stages:
             displayName: Build and Push lcpserver
             inputs:
               command: buildAndPush
-              repository: 'mycontainerregistry.azurecr.io/lcpserver'
+              repository: 'lcslsdcontainer.azurecr.io/lcpserver'
               dockerfile: 'ci/Dockerfile'  # Direkt sökväg till Dockerfile
               tags: |
                 $(tag)
+              buildContext: '.'
 
           # Steg 4: Bygg och pusha lsdserver-bild
           - task: Docker@2
             displayName: Build and Push lsdserver
             inputs:
               command: buildAndPush
-              repository: 'mycontainerregistry.azurecr.io/lsdserver'
+              repository: 'lcslsdcontainer.azurecr.io/lsdserver'
               dockerfile: 'ci/Dockerfile'  # Direkt sökväg till Dockerfile
               tags: |
                 $(tag)
+              buildContext: '.'
