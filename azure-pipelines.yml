@@ -73,9 +73,12 @@ stages:
                       # Om du behöver, logga in till Azure
                       az account show
 
-                # Steg 2: Uppdatera docker-compose.yml med rätt taggar (om nödvändigt)
-                # Om du använder unika taggar, kan du behöva dynamiskt uppdatera docker-compose.yml
-                # Här antas att docker-compose.yml refererar till 'latest'
+                - task: AzureWebAppContainer@1
+                  displayName: 'Deploy Docker Compose to Azure Web App'
+                  inputs:
+                    azureSubscription: 'ACR-lcp'  # Din Azure service connection
+                    appName: 'myWebApp'  # Din Azure Web App
+                    configurationFile: 'ci/docker-compose-azure.yml'
 
                 # Steg 3: Deploy Docker Compose till Azure App Service
                 - task: AzureWebAppContainer@1
