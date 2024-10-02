@@ -77,7 +77,7 @@ stages:
                   displayName: 'Deploy Docker Compose to Azure Web App'
                   inputs:
                     azureSubscription: 'ACR-lcp'  # Din Azure service connection
-                    appName: 'myWebApp'  # Din Azure Web App
+                    appName: 'LSDLCDserver'  # Din Azure Web App
                     configurationFile: 'ci/docker-compose-azure.yml'
 
                 # Steg 3: Deploy Docker Compose till Azure App Service
