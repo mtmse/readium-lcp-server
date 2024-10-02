@@ -47,3 +47,71 @@ stages:
               tags: |
                 $(tag)
               buildContext: '.'
+
+  - stage: Deploy
+    displayName: Deploy to Azure App Service
+    dependsOn: Build
+    jobs:
+      - deployment: Deploy
+        displayName: Deploy
+        environment: 'developmentlcp'  # Eller skapa ett nytt miljö om nödvändigt
+        pool:
+          vmImage: 'ubuntu-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+
+                # Steg 1: Logga in till Azure
+                - task: AzureCLI@2
+                  inputs:
+                    azureSubscription: 'ACR-lcp'  # Kan användas för att referera till din subscription
+                    scriptType: 'bash'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      # Om du behöver, logga in till Azure
+                      az account show
+
+                # Steg 2: Uppdatera docker-compose.yml med rätt taggar (om nödvändigt)
+                # Om du använder unika taggar, kan du behöva dynamiskt uppdatera docker-compose.yml
+                # Här antas att docker-compose.yml refererar till 'latest'
+
+                # Steg 3: Deploy Docker Compose till Azure App Service
+                - task: AzureWebAppContainer@1
+                  displayName: 'Deploy Docker Compose to Azure Web App'
+                  inputs:
+                    azureSubscription: 'ACR-lcp'  # Din Azure service connection
+                    appName: 'LSDLCDserver'  # Din Azure Web App
+                    containers: |
+                      [
+                        {
+                          "name": "nginx",
+                          "image": "lcslsdcontainer.azurecr.io/nginx:latest",
+                          "cpu": 0.5,
+                          "memoryInGB": 1,
+                          "environmentVariables": {}
+                        },
+                        {
+                          "name": "lcpserver",
+                          "image": "lcslsdcontainer.azurecr.io/lcpserver:$(tag)",
+                          "cpu": 1,
+                          "memoryInGB": 2,
+                          "environmentVariables": {
+                            "DATABASE_CONNECTION_STRING": "$(DATABASE_CONNECTION_STRING)",
+                            "ENV_VAR1": "$(LCP_ENV_VAR1)",
+                            "ENV_VAR2": "$(LCP_ENV_VAR2)"
+                          }
+                        },
+                        {
+                          "name": "lsdserver",
+                          "image": "lcslsdcontainer.azurecr.io/lsdserver:$(tag)",
+                          "cpu": 1,
+                          "memoryInGB": 2,
+                          "environmentVariables": {
+                            "DATABASE_CONNECTION_STRING": "$(DATABASE_CONNECTION_STRING)",
+                            "ENV_VAR1": "$(LSD_ENV_VAR1)",
+                            "ENV_VAR2": "$(LSD_ENV_VAR2)"
+                          }
+                        }
+                      ]
