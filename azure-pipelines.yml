@@ -15,10 +15,6 @@ stages:
         steps:
           - checkout: self
 
-          # Steg 1: Lista filer för felsökning
-          - script: ls -R /home/vsts/work/1/s/
-            displayName: 'List files in source directory'
-
           # Steg 2: Logga in till ACR via Docker Registry service connection
           - task: Docker@2
             displayName: Login to ACR
@@ -72,15 +68,6 @@ stages:
                     inlineScript: |
                       # Om du behöver, logga in till Azure
                       az account show
-
-                # Steg 2: Uppdatera docker-compose-azure.yaml med rätt taggar
-                - task: Bash@3
-                  displayName: 'Update docker-compose-azure.yaml with tag'
-                  inputs:
-                    targetType: 'inline'
-                    script: |
-                      sed -i 's/\${TAG}/'"$(tag)"'/g' ci/docker-compose-azure.yaml
-                      cat ci/docker-compose-azure.yaml  # Lägg till detta för att verifiera substitutionen
 
                 # Steg 3: Deploy Docker Compose till Azure App Service
                 - task: AzureWebAppContainer@1
