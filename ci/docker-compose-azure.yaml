@@ -13,7 +13,7 @@ services:
 
   lcpserver:
     restart: unless-stopped
-    image: lcslsdcontainer.azurecr.io/lcpserver:${TAG}
+    image: lcslsdcontainer.azurecr.io/lcpserver:latest
     ports:
       - "8989:8989"
     networks:
@@ -21,7 +21,7 @@ services:
 
   lsdserver:
     restart: unless-stopped
-    image: lcslsdcontainer.azurecr.io/lsdserver:${TAG}
+    image: lcslsdcontainer.azurecr.io/lsdserver:latest
     ports:
       - "8990:8990"
     networks:
