@@ -73,6 +73,30 @@ stages:
                       # Om du behöver, logga in till Azure
                       az account show
 
+                - task: AzureCLI@2
+                  displayName: 'Upload nginx.conf to Azure App Service'
+                  inputs:
+                    azureSubscription: 'ACR-lcp'
+                    scriptType: 'pscore'  # PowerShell Core
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      $appName = "$(appName)"
+                      $resourceGroup = "$(resourceGroup)"
+                      $localFilePath = "ci/nginx.conf"
+                      $remoteFilePath = "/home/nginx.conf"
+
+                      # Hämta publikationprofilen
+                      $publishingProfile = az webapp deployment list-publishing-profiles --name $appName --resource-group $resourceGroup --query "[?publishMethod=='MSDeploy']" --output json | ConvertFrom-Json
+
+                      $username = $publishingProfile[0].userName
+                      $password = $publishingProfile[0].userPWD
+
+                      # Ladda Upp nginx.conf via Kudu API
+                      $kuduUrl = "https://$appName.scm.azurewebsites.net/api/vfs$remoteFilePath"
+
+                      Invoke-RestMethod -Uri $kuduUrl -Method Put -InFile $localFilePath -Credential (New-Object System.Management.Automation.PSCredential ($username, (ConvertTo-SecureString $password -AsPlainText -Force))) -ContentType "application/octet-stream"
+
+
                 # Steg 2: Uppdatera docker-compose-azure.yaml med rätt taggar
                 - task: Bash@3
                   displayName: 'Update docker-compose-azure.yaml with tag'
