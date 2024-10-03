@@ -13,17 +13,31 @@ services:
 
   lcpserver:
     restart: unless-stopped
-    image: lcslsdcontainer.azurecr.io/lcpserver:${TAG}
+    build:
+      context: ../
+      dockerfile: ci/Dockerfile
+      target: runtime-lcp
+    image: ghcr.io/notalib/readium-lcp-server/lcpserver:${TAG:-latest}
+    #environment:
+    #volumes:
+      # i18n ?
     ports:
-      - "8989:8989"
+      - 8989:8989
     networks:
       - app-network
 
   lsdserver:
     restart: unless-stopped
-    image: lcslsdcontainer.azurecr.io/lsdserver:${TAG}
+    build:
+      context: ../
+      dockerfile: ci/Dockerfile
+      target: runtime-lsd
+    image: ghcr.io/notalib/readium-lcp-server/lsdserver:${TAG:-latest}
+    #environment:
+    #volumes:
+      # i18n ?
     ports:
-      - "8990:8990"
+      - 8990:8990
     networks:
       - app-network
 
