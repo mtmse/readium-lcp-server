@@ -34,7 +34,7 @@ stages:
               repository: 'lcslsdcontainer.azurecr.io/lcpserver'
               dockerfile: 'ci/Dockerfile'  # Direkt sökväg till Dockerfile
               tags: |
-                $(tag)
+                latest
               buildContext: '.'  # Kontexten till byggsteget
 
           # Steg 4: Bygg och pusha lsdserver-bild
@@ -45,7 +45,7 @@ stages:
               repository: 'lcslsdcontainer.azurecr.io/lsdserver'
               dockerfile: 'ci/Dockerfile'  # Direkt sökväg till Dockerfile
               tags: |
-                $(tag)
+                latest
               buildContext: '.'  # Kontexten till byggsteget
 
   - stage: Deploy
