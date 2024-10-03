@@ -31,7 +31,7 @@ stages:
             displayName: Build and Push lcpserver
             inputs:
               command: buildAndPush
-              repository: 'lcslsdcontainer.azurecr.io/lcpserver'
+              repository: 'lcpserver'
               dockerfile: 'ci/Dockerfile'  # Direkt sökväg till Dockerfile
               tags: |
                 latest
@@ -42,7 +42,7 @@ stages:
             displayName: Build and Push lsdserver
             inputs:
               command: buildAndPush
-              repository: 'lcslsdcontainer.azurecr.io/lsdserver'
+              repository: 'lsdserver'
               dockerfile: 'ci/Dockerfile'  # Direkt sökväg till Dockerfile
               tags: |
                 latest
