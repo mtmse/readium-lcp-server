@@ -17,7 +17,7 @@ services:
       context: ../
       dockerfile: ci/Dockerfile
       target: runtime-lcp
-    image: ghcr.io/notalib/readium-lcp-server/lcpserver:${TAG:-latest}
+    image: ghcr.io/notalib/readium-lcp-server/lcpserver:${TAG}
     #environment:
     #volumes:
       # i18n ?
@@ -32,7 +32,7 @@ services:
       context: ../
       dockerfile: ci/Dockerfile
       target: runtime-lsd
-    image: ghcr.io/notalib/readium-lcp-server/lsdserver:${TAG:-latest}
+    image: ghcr.io/notalib/readium-lcp-server/lsdserver:${TAG}
     #environment:
     #volumes:
       # i18n ?
