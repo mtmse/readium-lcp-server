@@ -40,7 +40,9 @@ stages:
             inputs:
               containerRegistry: 'docker_lcp'
               command: 'push'
-              repository: 'lcslsdcontainer.azurecr.io/nginx:latest'
+              repository: 'lcslsdcontainer.azurecr.io'
+              container: 'nginx'
+              tags: 'latest'
 
           # Bygg lcpserver-bilden
           - task: Docker@2
@@ -59,7 +61,8 @@ stages:
             inputs:
               containerRegistry: 'docker_lcp'
               command: 'push'
-              repository: 'lcslsdcontainer.azurecr.io/lcpserver:latest'
+              repository: 'lcslsdcontainer.azurecr.io/lcpserver'
+              tags: 'latest'
 
           # Bygg lsdserver-bilden
           - task: Docker@2
@@ -78,7 +81,8 @@ stages:
             inputs:
               containerRegistry: 'docker_lcp'
               command: 'push'
-              repository: 'lcslsdcontainer.azurecr.io/lsdserver:latest'
+              repository: 'lcslsdcontainer.azurecr.io/lsdserver'
+              tags: 'latest'
 
 
   - stage: Deploy
