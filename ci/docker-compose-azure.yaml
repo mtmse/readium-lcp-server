@@ -2,14 +2,14 @@ version: '3.8'
 
 services:
   nginx:
-    image: nginx:latest  # Använd den offentliga nginx-bilden från Docker Hub
+    image: lcslsdcontainer.azurecr.io/nginx:latest  # Din egen Nginx-image med nginx.conf inkluderad
     ports:
       - "80:80"
-    volumes:
-      - /home/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - lcpserver
       - lsdserver
+    networks:
+      - app-network
 
   lcpserver:
     restart: unless-stopped
