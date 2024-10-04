@@ -28,6 +28,7 @@ stages:
           - task: Docker@2
             displayName: 'Bygg nginx-bild'
             inputs:
+              repository: 'lcslsdcontainer.azurecr.io' 
               containerRegistry: 'docker_lcp'  # Docker Registry Service Connection
               command: 'build'
               Dockerfile: 'ci/nginx/Dockerfile'
