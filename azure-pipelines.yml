@@ -35,18 +35,6 @@ stages:
               Dockerfile: 'ci/nginx/Dockerfile'
               tags: 'latest'
 
-          # Bygg och pusha övriga tjänster via Docker Compose
-          - task: DockerCompose@1
-            displayName: 'Build & Push Services'
-            inputs:
-              containerregistrytype: 'Azure Container Registry'
-              azureSubscription: 'acr-lcp'
-              azureContainerRegistry: '$(acrName)'
-              dockerComposeFile: 'ci/docker-compose-azure.yaml'
-              action: 'Push services'
-              projectName: 'mtmse-readium-lcp-server'  # Giltigt projekt namn utan snedstreck
-              qualifyImageNames: true
-
 
   - stage: Deploy
     displayName: Deploy to Azure App Service
