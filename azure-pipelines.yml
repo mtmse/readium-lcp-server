@@ -25,38 +25,64 @@ stages:
               command: 'login'
               containerRegistry: 'docker_lcp'  # Din Azure service connection
 
-        # Bygg och pusha nginx-bilden
           - task: Docker@2
-            displayName: 'Build and Push nginx image'
+            displayName: 'Bygg nginx-bild'
+            inputs:
+              containerRegistry: 'docker_lcp'  # Docker Registry Service Connection
+              command: 'build'
+              Dockerfile: 'ci/Dockerfile'
+              buildContext: 'ci/'
+              tags: 'lcslsdcontainer.azurecr.io/nginx:latest'
+              arguments: '--target runtime-nginx'
+
+          # Pusha nginx-bilden
+          - task: Docker@2
+            displayName: 'Pusha nginx-bild'
             inputs:
               containerRegistry: 'docker_lcp'
-              repository: 'nginx'
-              command: 'buildAndPush'
-              Dockerfile: 'ci/nginx/Dockerfile'
+              command: 'push'
+              repository: 'lcslsdcontainer.azurecr.io/nginx'
               tags: 'latest'
-          
-          - task: Docker@2
-            displayName: 'Bygg och Pusha lcpserver-bild'
-            inputs:
-              containerRegistry: 'docker_lcp'  # Docker Registry Service Connection
-              repository: 'lcpserver'
-              command: 'buildAndPush'
-              Dockerfile: 'ci/Dockerfile'
-              buildContext: 'ci'
-              tags: 'latest'
-              arguments: '--target runtime-lcp'  # Bygg för lcpserver
 
-          # Bygg och pusha lsdserver-bilden
+          # Bygg lcpserver-bilden
           - task: Docker@2
-            displayName: 'Bygg och Pusha lsdserver-bild'
+            displayName: 'Bygg lcpserver-bild'
             inputs:
-              containerRegistry: 'docker_lcp'  # Docker Registry Service Connection
-              repository: 'lsdserver'
-              command: 'buildAndPush'
+              containerRegistry: 'docker_lcp'
+              command: 'build'
               Dockerfile: 'ci/Dockerfile'
-              buildContext: 'ci'
+              buildContext: 'ci/'
+              tags: 'lcslsdcontainer.azurecr.io/lcpserver:latest'
+              arguments: '--target runtime-lcp'
+
+          # Pusha lcpserver-bilden
+          - task: Docker@2
+            displayName: 'Pusha lcpserver-bild'
+            inputs:
+              containerRegistry: 'docker_lcp'
+              command: 'push'
+              repository: 'lcslsdcontainer.azurecr.io/lcpserver'
               tags: 'latest'
+
+          # Bygg lsdserver-bilden
+          - task: Docker@2
+            displayName: 'Bygg lsdserver-bild'
+            inputs:
+              containerRegistry: 'docker_lcp'
+              command: 'build'
+              Dockerfile: 'ci/Dockerfile'
+              buildContext: 'ci/'
+              tags: 'lcslsdcontainer.azurecr.io/lsdserver:latest'
               arguments: '--target runtime-lsd'
+
+          # Pusha lsdserver-bilden
+          - task: Docker@2
+            displayName: 'Pusha lsdserver-bild'
+            inputs:
+              containerRegistry: 'docker_lcp'
+              command: 'push'
+              repository: 'lcslsdcontainer.azurecr.io/lsdserver'
+              tags: 'latest'
 
 
   - stage: Deploy
