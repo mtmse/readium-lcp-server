@@ -40,7 +40,7 @@ stages:
             displayName: 'Build & Push Services'
             inputs:
               containerregistrytype: 'Azure Container Registry'
-              azureSubscription: 'ACR-lcp'
+              azureSubscription: 'acr-lcp'
               azureContainerRegistry: '$(acrName)'
               dockerComposeFile: 'ci/docker-compose-azure.yaml'
               action: 'Push services'
