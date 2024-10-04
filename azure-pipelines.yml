@@ -72,6 +72,7 @@ stages:
                       -DOCKER_REGISTRY_SERVER_URL lcslsdcontainer.azurecr.io
                       -DOCKER_REGISTRY_SERVER_PASSWORD $(RegistrySecret)
                     containers: |
+                      lcslsdcontainer.azurecr.io/nginx:latest
                       lcslsdcontainer.azurecr.io/lcpserver:latest
                       lcslsdcontainer.azurecr.io/lsdserver:latest
                     multicontainerConfigFile: 'ci/docker-compose-azure.yaml'  # Ange rätt sökväg till docker-compose.yml
