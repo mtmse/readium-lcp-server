@@ -52,7 +52,8 @@ stages:
               command: 'build'
               Dockerfile: 'ci/Dockerfile'
               buildContext: 'ci/'
-              tags: 'lcslsdcontainer.azurecr.io/lcpserver:latest'
+              repository: 'lcpserver'
+              tags: 'latest'
               arguments: '--target runtime-lcp'
 
           # Pusha lcpserver-bilden
@@ -61,7 +62,7 @@ stages:
             inputs:
               command: 'push'
               containerRegistry: 'docker_lcp'
-              repository: 'lcslsdcontainer.azurecr.io'
+              repository: 'lcpserver'
               tags: 'latest'
 
           # Bygg lsdserver-bilden
@@ -72,7 +73,8 @@ stages:
               command: 'build'
               Dockerfile: 'ci/Dockerfile'
               buildContext: 'ci/'
-              tags: 'lcslsdcontainer.azurecr.io/lsdserver:latest'
+              repository: 'lsdserver'
+              tags: 'latest'
               arguments: '--target runtime-lsd'
 
           # Pusha lsdserver-bilden
@@ -81,7 +83,7 @@ stages:
             inputs:
               containerRegistry: 'docker_lcp'
               command: 'push'
-              repository: 'lcslsdcontainer.azurecr.io/lsdserver'
+              repository: 'lsdserver'
               tags: 'latest'
 
 
