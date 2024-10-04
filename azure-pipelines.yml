@@ -32,7 +32,7 @@ stages:
               containerRegistry: 'docker_lcp'
               repository: 'nginx'
               command: 'buildAndPush'
-              Dockerfile: 'nginx/Dockerfile'
+              Dockerfile: 'ci/nginx/Dockerfile'
               tags: 'latest'
 
           # Bygg och pusha övriga tjänster via Docker Compose
@@ -42,7 +42,7 @@ stages:
               containerregistrytype: 'Azure Container Registry'
               azureSubscription: 'ACR-lcp'
               azureContainerRegistry: '$(acrName)'
-              dockerComposeFile: '**/docker-compose-azure.yaml'
+              dockerComposeFile: 'ci/docker-compose-azure.yaml'
               action: 'Push services'
               projectName: 'mtmse-readium-lcp-server'  # Giltigt projekt namn utan snedstreck
               qualifyImageNames: true
