@@ -40,8 +40,8 @@ stages:
             inputs:
               containerRegistry: 'docker_lcp'
               command: 'push'
-              repository: 'nginx'
-              tags: 'latest'
+              repository: 'lcslsdcontainer.azurecr.io'
+              tags: 'nginx:latest'
 
           # Bygg lcpserver-bilden
           - task: Docker@2
