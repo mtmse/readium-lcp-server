@@ -44,7 +44,6 @@ stages:
               repository: 'nginx'
               tags: 'latest'
 
-          # Bygg lcpserver-bilden
           - task: Docker@2
             displayName: 'Bygg lcpserver-bild'
             inputs:
@@ -56,16 +55,16 @@ stages:
               tags: 'latest'
               arguments: '--target runtime-lcp'
 
-          # Pusha lcpserver-bilden
+          # Pusha lcpserver-bild
           - task: Docker@2
             displayName: 'Pusha lcpserver-bild'
             inputs:
-              command: 'push'
               containerRegistry: 'docker_lcp'
+              command: 'push'
               repository: 'lcpserver'
               tags: 'latest'
 
-          # Bygg lsdserver-bilden
+          # Bygg lsdserver-bild
           - task: Docker@2
             displayName: 'Bygg lsdserver-bild'
             inputs:
@@ -77,7 +76,7 @@ stages:
               tags: 'latest'
               arguments: '--target runtime-lsd'
 
-          # Pusha lsdserver-bilden
+          # Pusha lsdserver-bild
           - task: Docker@2
             displayName: 'Pusha lsdserver-bild'
             inputs:
@@ -85,6 +84,10 @@ stages:
               command: 'push'
               repository: 'lsdserver'
               tags: 'latest'
+
+          # Lista Docker bilder för verifiering
+          - script: docker images
+            displayName: 'Lista Docker-bilder'
 
 
   - stage: Deploy
