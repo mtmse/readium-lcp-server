@@ -28,20 +28,20 @@ stages:
           - task: Docker@2
             displayName: 'Bygg nginx-bild'
             inputs:
-              repository: 'lcslsdcontainer.azurecr.io' 
-              containerRegistry: 'docker_lcp'  # Docker Registry Service Connection
+              containerRegistry: 'docker_lcp'
               command: 'build'
               Dockerfile: 'ci/nginx/Dockerfile'
               buildContext: 'ci/'
-              tags: 'lcslsdcontainer.azurecr.io/nginx:latest'
+              repository: 'nginx'
+              tags: 'latest'
 
-          # Pusha nginx-bilden
+          # Pusha nginx-bild
           - task: Docker@2
             displayName: 'Pusha nginx-bild'
             inputs:
               containerRegistry: 'docker_lcp'
               command: 'push'
-              repository: 'lcslsdcontainer.azurecr.io'
+              repository: 'nginx'
               tags: 'latest'
 
           # Bygg lcpserver-bilden
