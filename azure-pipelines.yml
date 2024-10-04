@@ -75,4 +75,11 @@ stages:
                   inputs:
                     azureSubscription: 'ACR-lcp'  # Din Azure service connection
                     appName: 'LSDLCDserver'  # Din Azure Web App
+                    appSettings:
+                      -DOCKER_REGISTRY_SERVER_USERNAME lcslsdcontainer
+                      -DOCKER_REGISTRY_SERVER_URL lcslsdcontainer.azurecr.io
+                      -DOCKER_REGISTRY_SERVER_PASSWORD $(RegistrySecret)
+                    containers: |
+                      lcslsdcontainer.azurecr.io/lcpserver:latest
+                      lcslsdcontainer.azurecr.io/lsdserver:latest
                     multicontainerConfigFile: 'ci/docker-compose-azure.yaml'  # Ange rätt sökväg till docker-compose.yml
