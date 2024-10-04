@@ -22,7 +22,7 @@ stages:
               containerregistrytype: 'Azure Container Registry'
               azureSubscription: 'ACR-lcp'  # Din Azure service connection
               azureContainerRegistry: 'lcslsdcontainer'
-              dockerComposeFile: '**/docker-compose-azure.yaml'
+              dockerComposeFile: 'ci/docker-compose-azure.yaml'
               action: 'Push services'
               qualifyImageNames: true
 
