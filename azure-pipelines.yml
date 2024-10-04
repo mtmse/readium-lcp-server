@@ -24,6 +24,7 @@ stages:
               azureContainerRegistry: 'lcslsdcontainer'
               dockerComposeFile: 'ci/docker-compose-azure.yaml'
               action: 'Push services'
+              projectName: 'mtmse-readium-lcp-server'
               qualifyImageNames: true
 
 
