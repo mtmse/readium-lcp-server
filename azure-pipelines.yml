@@ -27,6 +27,12 @@ stages:
               scriptLocation: 'inlineScript'
               inlineScript: |
                 az acr login --name $(acrName)
+          
+          - task: Docker@2
+            displayName: 'Login to ACR'
+            inputs:
+              command: 'login'
+              containerRegistry: 'docker_lcp'
 
           # Dra nginx:latest från Docker Hub
           - script: |
@@ -49,6 +55,7 @@ stages:
             inputs:
               containerregistrytype: 'Azure Container Registry'
               azureSubscription: 'ACR-lcp'  # Din Azure service connection
+              
               azureContainerRegistry: 'lcslsdcontainer'
               dockerComposeFile: 'ci/docker-compose-azure.yaml'
               action: 'Push services'
