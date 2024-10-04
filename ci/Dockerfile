@@ -24,6 +24,9 @@ RUN go build -o $GOPATH/bin/ ./lcpserver
 RUN go build -o $GOPATH/bin/ ./lsdserver
 RUN go build -o $GOPATH/bin/ ./lcpencrypt
 
+FROM nginx:latest
+COPY nginx.conf /etc/nginx/nginx.conf
+
 #######################
 # Runtime image (LCP) #
 #######################
