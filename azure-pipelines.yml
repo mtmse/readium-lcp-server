@@ -33,7 +33,6 @@ stages:
               Dockerfile: 'ci/Dockerfile'
               buildContext: 'ci/'
               tags: 'lcslsdcontainer.azurecr.io/nginx:latest'
-              arguments: '--target runtime-nginx'
 
           # Pusha nginx-bilden
           - task: Docker@2
