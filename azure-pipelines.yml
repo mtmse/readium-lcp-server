@@ -19,47 +19,32 @@ stages:
           - checkout: self
 
           # Logga in till ACR
-          - task: AzureCLI@2
-            displayName: 'Login to ACR'
-            inputs:
-              azureSubscription: 'ACR-lcp'  # Din Azure service connection
-              scriptType: 'bash'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                az acr login --name $(acrName)
-          
           - task: Docker@2
             displayName: 'Login to ACR'
             inputs:
               command: 'login'
+              containerRegistry: 'docker_lcp'  # Din Azure service connection
+
+        # Bygg och pusha nginx-bilden
+          - task: Docker@2
+            displayName: 'Build and Push nginx image'
+            inputs:
               containerRegistry: 'docker_lcp'
+              repository: 'nginx'
+              command: 'buildAndPush'
+              Dockerfile: 'nginx/Dockerfile'
+              tags: 'latest'
 
-          # Dra nginx:latest från Docker Hub
-          - script: |
-              docker pull nginx:latest
-            displayName: 'Pull nginx:latest from Docker Hub'
-
-          # Tagga nginx-bilden för ACR
-          - script: |
-              docker tag nginx:latest $(acrName).azurecr.io/nginx:latest
-            displayName: 'Tag nginx:latest for ACR'
-
-          # Pusha nginx-bilden till ACR
-          - script: |
-              docker push $(acrName).azurecr.io/nginx:latest
-            displayName: 'Push nginx:latest to ACR'
-
-          # Logga in till ACR och bygg & pusha via Docker Compose
+          # Bygg och pusha övriga tjänster via Docker Compose
           - task: DockerCompose@1
-            displayName: 'Login to ACR and Build & Push'
+            displayName: 'Build & Push Services'
             inputs:
               containerregistrytype: 'Azure Container Registry'
-              azureSubscription: 'ACR-lcp'  # Din Azure service connection
-              
-              azureContainerRegistry: 'lcslsdcontainer'
-              dockerComposeFile: 'ci/docker-compose-azure.yaml'
+              azureSubscription: 'ACR-lcp'
+              azureContainerRegistry: '$(acrName)'
+              dockerComposeFile: '**/docker-compose-azure.yaml'
               action: 'Push services'
-              projectName: 'mtmse-readium-lcp-server'
+              projectName: 'mtmse-readium-lcp-server'  # Giltigt projekt namn utan snedstreck
               qualifyImageNames: true
 
 
