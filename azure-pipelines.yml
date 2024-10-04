@@ -30,7 +30,7 @@ stages:
             inputs:
               containerRegistry: 'docker_lcp'  # Docker Registry Service Connection
               command: 'build'
-              Dockerfile: 'ci/Dockerfile'
+              Dockerfile: 'ci/nginx/Dockerfile'
               buildContext: 'ci/'
               tags: 'lcslsdcontainer.azurecr.io/nginx:latest'
 
