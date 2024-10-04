@@ -41,7 +41,6 @@ stages:
               containerRegistry: 'docker_lcp'
               command: 'push'
               repository: 'lcslsdcontainer.azurecr.io'
-              container: 'nginx'
               tags: 'latest'
 
           # Bygg lcpserver-bilden
@@ -59,9 +58,9 @@ stages:
           - task: Docker@2
             displayName: 'Pusha lcpserver-bild'
             inputs:
-              containerRegistry: 'docker_lcp'
               command: 'push'
-              repository: 'lcslsdcontainer.azurecr.io/lcpserver'
+              containerRegistry: 'docker_lcp'
+              repository: 'lcslsdcontainer.azurecr.io'
               tags: 'latest'
 
           # Bygg lsdserver-bilden
