@@ -34,6 +34,29 @@ stages:
               command: 'buildAndPush'
               Dockerfile: 'ci/nginx/Dockerfile'
               tags: 'latest'
+          
+          - task: Docker@2
+            displayName: 'Bygg och Pusha lcpserver-bild'
+            inputs:
+              containerRegistry: 'docker_lcp'  # Docker Registry Service Connection
+              repository: 'lcpserver'
+              command: 'buildAndPush'
+              Dockerfile: 'ci/Dockerfile'
+              buildContext: 'ci'
+              tags: 'latest'
+              arguments: '--target runtime-lcp'  # Bygg för lcpserver
+
+          # Bygg och pusha lsdserver-bilden
+          - task: Docker@2
+            displayName: 'Bygg och Pusha lsdserver-bild'
+            inputs:
+              containerRegistry: 'docker_lcp'  # Docker Registry Service Connection
+              repository: 'lsdserver'
+              command: 'buildAndPush'
+              Dockerfile: 'ci/Dockerfile'
+              buildContext: 'ci'
+              tags: 'latest'
+              arguments: '--target runtime-lsd'
 
 
   - stage: Deploy
