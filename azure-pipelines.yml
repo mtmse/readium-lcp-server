@@ -3,6 +3,9 @@ trigger:
 
 variables:
   tag: $(Build.BuildId)
+  resourceGroup: 'mtm_lcp-and-lsp-servers_prod'  # Byt ut med ditt resursgruppnamn
+  appName: 'LSDLCDserver'
+  acrName: 'lcslsdcontainer'  # Din ACR-namn
 
 stages:
   - stage: Build
@@ -14,6 +17,31 @@ stages:
           vmImage: 'ubuntu-latest'
         steps:
           - checkout: self
+
+          # Logga in till ACR
+          - task: AzureCLI@2
+            displayName: 'Login to ACR'
+            inputs:
+              azureSubscription: 'ACR-lcp'  # Din Azure service connection
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az acr login --name $(acrName)
+
+          # Dra nginx:latest från Docker Hub
+          - script: |
+              docker pull nginx:latest
+            displayName: 'Pull nginx:latest from Docker Hub'
+
+          # Tagga nginx-bilden för ACR
+          - script: |
+              docker tag nginx:latest $(acrName).azurecr.io/nginx:latest
+            displayName: 'Tag nginx:latest for ACR'
+
+          # Pusha nginx-bilden till ACR
+          - script: |
+              docker push $(acrName).azurecr.io/nginx:latest
+            displayName: 'Push nginx:latest to ACR'
 
           # Logga in till ACR och bygg & pusha via Docker Compose
           - task: DockerCompose@1
