@@ -83,7 +83,9 @@
     "@types/selenium-webdriver": "2.53.33",
     "@types/cors": "0.0.29",
     "@types/express-serve-static-core": "4.0.31",
-    "@types/qs": "6.5.1"
+    "@types/qs": "6.5.1",
+    "@types/connect": "3.3.30",
+    "@types/http-errors": "1.0.0"
   },
   "repository": {}
 }
