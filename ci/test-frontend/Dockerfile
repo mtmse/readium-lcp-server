@@ -10,7 +10,7 @@ COPY frontend/manage/package*.json ./
 RUN npm install
 
 # Kopiera resten av Angular frontend-koden
-COPY frontend/manage/app/ ./
+COPY frontend/manage/ ./
 
 # Bygg Angular-applikationen
 RUN npm run build
