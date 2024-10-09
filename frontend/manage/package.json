@@ -79,8 +79,8 @@
     "protractor": "4.0.9",
     "webdriver-manager": "10.2.5",
     "@types/node": "6.0.35",
-    "@types/jasmine": "2.5.38",
-    "@types/selenium-webdriver": "2.53.33",
+    "@types/jasmine": "2.5.36",
+    "@types/selenium-webdriver": "2.53.33"
   },
   "repository": {}
 }
