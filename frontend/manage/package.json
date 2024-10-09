@@ -80,7 +80,7 @@
     "webdriver-manager": "10.2.5",
     "@types/node": "6.0.35",
     "@types/jasmine": "2.5.38",
-    "@types/selenium-webdriver": "2.53.33"
+    "@types/selenium-webdriver": "2.53.33",
     "@types/cors": "0.0.3"
   },
   "repository": {}
