@@ -3,10 +3,16 @@ FROM node:16-alpine AS builder
 
 WORKDIR /app
 
-# Kopiera package.json och package-lock.json från Angular frontend
+# Sätt NODE_ENV till development för att installera devDependencies
+ENV NODE_ENV=development
+
+# Kopiera package.json från Angular frontend
 COPY frontend/manage/package*.json ./
 
-# Installera beroenden
+# Verifiera att package.json har kopierats
+RUN ls -la /app
+
+# Installera beroenden, inklusive devDependencies
 RUN npm install
 
 # Kopiera resten av Angular frontend-koden
@@ -18,11 +24,8 @@ RUN npm run build
 # Serve-steg med Nginx
 FROM nginx:alpine AS runtime-test-frontend
 
-# Kopiera byggda filer från builder-stegen till Nginx:s dokumentrot
+# Kopiera de byggda filerna till Nginx:s dokumentrot
 COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Kopiera anpassad Nginx-konfiguration om nödvändigt
-# COPY ci/nginx/nginx-test-frontend.conf /etc/nginx/conf.d/default.conf
 
 # Exponera port 80
 EXPOSE 80
