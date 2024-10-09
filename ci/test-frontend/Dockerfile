@@ -3,19 +3,19 @@ FROM node:10-alpine AS builder
 
 WORKDIR /app
 
-# Sätt NODE_ENV till development för att installera devDependencies
-ENV NODE_ENV=development
-
-# Installera git
+# Installera Git
 RUN apk add --no-cache git
 
-# Kopiera package.json och eventuellt package-lock.json från Angular frontend
+# Byt ut git:// med https:// för alla Git-repositorier
+RUN git config --global url."https://".insteadOf git://
+
+# Kopiera package.json och package-lock.json
 COPY frontend/manage/package*.json ./
 
 # Installera beroenden, inklusive devDependencies
-RUN npm install
+RUN npm install --no-audit --no-fund
 
-# Kopiera resten av Angular frontend-koden
+# Kopiera resten av frontend-koden
 COPY frontend/manage/ ./
 
 # Bygg Angular-applikationen
@@ -24,7 +24,7 @@ RUN npm run build
 # Serve-steg med Nginx
 FROM nginx:alpine AS runtime-test-frontend
 
-# Kopiera de byggda filerna från builder-stegen till Nginx:s dokumentrot
+# Kopiera de byggda filerna till Nginx:s dokumentrot
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Exponera port 80
