@@ -4,13 +4,13 @@ FROM node:16-alpine AS builder
 WORKDIR /app
 
 # Kopiera package.json och package-lock.json för att installera beroenden
-COPY package*.json ./
+COPY ../../frontend/package*.json ./
 
 # Installera beroenden
 RUN npm install
 
 # Kopiera resten av koden
-COPY . .
+COPY ../../frontend/ .
 
 # Bygg frontend
 RUN npm run build
