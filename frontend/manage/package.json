@@ -82,7 +82,7 @@
   "@types/jasmine": "2.5.36",
   "@types/selenium-webdriver": "2.53.33",
   "@types/cors": "0.0.29",
-  "@types/connect": "3.4.28",
+  "@types/connect": "3.4.38",
   "@types/http-errors": "1.0.0"
 },
   "repository": {}
