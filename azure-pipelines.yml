@@ -90,7 +90,7 @@ stages:
               containerRegistry: 'docker_lcp'
               command: 'build'
               Dockerfile: 'ci/test-frontend/Dockerfile'
-              buildContext: './ci/test-frontend'
+              buildContext: './'
               repository: 'test-frontend'
               tags: 'latest'
               arguments: '--target runtime-test-frontend'
