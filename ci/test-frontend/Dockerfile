@@ -1,16 +1,13 @@
 # Byggsteg för Angular frontend
-FROM node:16-alpine AS builder
+FROM node:10-alpine AS builder
 
 WORKDIR /app
 
-# Sätt NODE_ENV till development för att installera devDependencies
+# Säkerställ att devDependencies installeras
 ENV NODE_ENV=development
 
 # Kopiera package.json från Angular frontend
 COPY frontend/manage/package*.json ./
-
-# Verifiera att package.json har kopierats
-RUN ls -la /app
 
 # Installera beroenden, inklusive devDependencies
 RUN npm install
@@ -24,7 +21,7 @@ RUN npm run build
 # Serve-steg med Nginx
 FROM nginx:alpine AS runtime-test-frontend
 
-# Kopiera de byggda filerna till Nginx:s dokumentrot
+# Kopiera de byggda filerna från builder-stegen till Nginx:s dokumentrot
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Exponera port 80
