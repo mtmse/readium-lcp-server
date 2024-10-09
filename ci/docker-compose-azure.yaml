@@ -30,6 +30,13 @@ services:
     networks:
       - app-network
 
+  test-frontend:
+    image: lcslsdcontainer.azurecr.io/test-frontend:latest
+    ports:
+      - "3000:80"  # Anpassa portarna efter behov
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
