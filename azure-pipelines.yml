@@ -84,7 +84,26 @@ stages:
               command: 'push'
               repository: 'lsdserver'
               tags: 'latest'
+          - task: Docker@2
+            displayName: 'Bygg test-frontend-bild'
+            inputs:
+              containerRegistry: 'docker_lcp'
+              command: 'build'
+              Dockerfile: 'ci/test-frontend/Dockerfile'
+              buildContext: './ci/test-frontend'
+              repository: 'test-frontend'
+              tags: 'latest'
+              arguments: '--target runtime-test-frontend'
 
+          # Pusha test-frontend-bild
+          - task: Docker@2
+            displayName: 'Pusha test-frontend-bild'
+            inputs:
+              containerRegistry: 'docker_lcp'
+              command: 'push'
+              repository: 'test-frontend'
+              tags: 'latest'
+              
           # Lista Docker bilder för verifiering
           - script: docker images
             displayName: 'Lista Docker-bilder'
