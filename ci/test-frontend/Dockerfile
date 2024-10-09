@@ -4,7 +4,7 @@ FROM node:16-alpine AS builder
 WORKDIR /app
 
 # Kopiera package.json och package-lock.json från Angular frontend
-COPY frontend/manage/app/package*.json ./
+COPY frontend/manage/package*.json ./
 
 # Installera beroenden
 RUN npm install
