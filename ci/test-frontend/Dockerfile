@@ -1,5 +1,5 @@
 # Byggsteg för Angular frontend
-FROM node:8-alpine AS builder
+FROM node:14-alpine AS builder
 
 WORKDIR /app
 
