@@ -1,23 +1,28 @@
-# Byggsteg för Go frontend
-FROM golang:1.20-alpine AS builder
+# Byggsteg för Angular frontend
+FROM node:16-alpine AS builder
 
 WORKDIR /app
 
-# Kopiera Go-moduler och ladda ner beroenden
-COPY frontend/go.mod frontend/go.sum ./
-RUN go mod download
+# Kopiera package.json och package-lock.json från Angular frontend
+COPY frontend/mnanage/app/package*.json ./
 
-# Kopiera resten av frontend-koden
-COPY frontend/ ./
+# Installera beroenden
+RUN npm install
 
-# Bygg frontend-applikationen
-RUN go build -o frontend-app
+# Kopiera resten av Angular frontend-koden
+COPY frontend/manage/app/ ./
+
+# Bygg Angular-applikationen
+RUN npm run build
 
 # Serve-steg med Nginx
-FROM nginx:alpine
+FROM nginx:alpine AS runtime-test-frontend
 
-# Kopiera den byggda frontend-applikationen till Nginx:s dokumentrot
-COPY --from=builder /app/frontend-app /usr/share/nginx/html/
+# Kopiera byggda filer från builder-stegen till Nginx:s dokumentrot
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Kopiera anpassad Nginx-konfiguration om nödvändigt
+# COPY ci/nginx/nginx-test-frontend.conf /etc/nginx/conf.d/default.conf
 
 # Exponera port 80
 EXPOSE 80
