@@ -1,9 +1,9 @@
 # Byggsteg för Angular frontend
-FROM node:10-alpine AS builder
+FROM node:8-alpine AS builder
 
 WORKDIR /app
 
-# Säkerställ att devDependencies installeras
+# Sätt NODE_ENV till development för att installera devDependencies
 ENV NODE_ENV=development
 
 # Kopiera package.json från Angular frontend
