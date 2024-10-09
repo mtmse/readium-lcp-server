@@ -93,7 +93,6 @@ stages:
               buildContext: './'
               repository: 'test-frontend'
               tags: 'latest'
-              arguments: '--target runtime-test-frontend'
 
           # Pusha test-frontend-bild
           - task: Docker@2
