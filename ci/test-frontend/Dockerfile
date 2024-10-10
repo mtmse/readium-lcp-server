@@ -27,6 +27,10 @@ FROM nginx:alpine AS runtime-test-frontend
 # Kopiera de byggda filerna från builder-stegen till Nginx:s dokumentrot
 COPY --from=builder /app/dist /usr/share/nginx/html/test-frontend
 
+RUN chmod -R 755 /usr/share/nginx/html
+
+RUN chmod -R 755 /usr/share/nginx/html/test-frontend
+
 # Exponera port 80
 EXPOSE 80
 
