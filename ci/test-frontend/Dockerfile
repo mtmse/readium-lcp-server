@@ -25,7 +25,7 @@ RUN npm run build
 FROM nginx:alpine AS runtime-test-frontend
 
 # Kopiera de byggda filerna från builder-stegen till Nginx:s dokumentrot
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/dist /usr/share/nginx/html/test-frontend
 
 # Exponera port 80
 EXPOSE 80
