@@ -79,7 +79,7 @@ EXPOSE 8990
 
 CMD ["/app/lsdserver"]
 
-FROM runtime-frontend AS runtime-frontend
+FROM runtime-lcp AS runtime-frontend
 LABEL org.opencontainers.image.source https://github.com/notalib/readium-lcp-server
 
 # Mounted config.yaml decides which ports to use. This is the default from config.localhost.yml.
