@@ -23,6 +23,7 @@ ENV GOARCH=${TARGETARCH}
 RUN go build -o $GOPATH/bin/ ./lcpserver
 RUN go build -o $GOPATH/bin/ ./lsdserver
 RUN go build -o $GOPATH/bin/ ./lcpencrypt
+RUN go build -o $GOPATH/bin/ ./frontend
 
 #######################
 # Runtime image (LCP) #
@@ -77,3 +78,11 @@ LABEL org.opencontainers.image.source https://github.com/notalib/readium-lcp-ser
 EXPOSE 8990
 
 CMD ["/app/lsdserver"]
+
+FROM runtime-frontend AS runtime-frontend
+LABEL org.opencontainers.image.source https://github.com/notalib/readium-lcp-server
+
+# Mounted config.yaml decides which ports to use. This is the default from config.localhost.yml.
+EXPOSE 8991
+
+CMD ["/app/frontend"]
