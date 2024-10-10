@@ -11,7 +11,7 @@ services:
     depends_on:
       - lcpserver
       - lsdserver
-      - test-frontend
+      - frontend
     networks:
       - app-network
 
@@ -31,8 +31,8 @@ services:
     networks:
       - app-network
 
-  test-frontend:
-    image: lcslsdcontainer.azurecr.io/test-frontend:latest
+  frontend:
+    image: lcslsdcontainer.azurecr.io/frontend:latest
     ports:
       - "8991:8991"  # Anpassa portarna efter behov
     networks:
