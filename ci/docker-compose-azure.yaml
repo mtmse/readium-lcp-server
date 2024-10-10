@@ -34,7 +34,7 @@ services:
   test-frontend:
     image: lcslsdcontainer.azurecr.io/test-frontend:latest
     ports:
-      - "3000:80"  # Anpassa portarna efter behov
+      - "8991:8991"  # Anpassa portarna efter behov
     networks:
       - app-network
 
