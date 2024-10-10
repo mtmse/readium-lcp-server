@@ -1,0 +1,37 @@
+name: publish helm chart
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["ci"]
+    paths:
+      - "ci/helm-chart/Chart.yaml"
+
+jobs:
+  chart:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'pull_request' }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      # - name: Update chart
+      #   run: ./ci/update_chart_version.sh
+      # - name: Commit chart update
+      #   run: |
+      #     git config user.name "nota-ci"
+      #     git config user.email "notaci@nota.dk"
+      #     git add ci/helm-chart/Chart.yaml
+      #     git commit -m "chor(ci): update Chart version" || echo "Nothing to commit"
+      #     git push origin ${{ github.ref_name }}
+      - name: Publish Helm chart
+        uses: stefanprodan/helm-gh-pages@v1.7.0
+        with:
+          token: ${{ secrets.GH_HELM_CHARTS_WRITE }}
+          owner: notalib
+          charts_dir: ci
+          repository: helm-charts
+          target_dir: charts
+          index_dir: .
+          commit_username: nota-ci
+          commit_email: notaci@nota.dk
