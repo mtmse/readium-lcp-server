@@ -84,3 +84,5 @@ frontend:
     provider_uri: "https://localhost/download/"
     right_print: 10
     right_copy: 2000
+frontendserver:
+    directory: "/absolute/path/to/frontend/manage"

@@ -98,7 +98,7 @@ func main() {
 	if static == "" {
 		_, file, _, _ := runtime.Caller(0)
 		here := filepath.Dir(file)
-		static = filepath.Join(here, "../frontend/manage")
+		static = filepath.Join(here, "../../app/frontend/manage")
 	}
 
 	filepathConfigJs := filepath.Join(static, "config.js")
