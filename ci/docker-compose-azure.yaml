@@ -19,9 +19,6 @@ services:
   lcpserver:
     restart: unless-stopped
     image: lcslsdcontainer.azurecr.io/lcpserver:latest
-    volumes:
-        - ${WEBAPP_STORAGE_HOME}/data/files/storage:/data/files/storage
-        - ${WEBAPP_STORAGE_HOME}/data/files/encrypted:/data/files/encrypted
     user: root  # Add this line
     ports:
       - "8989:8989"
@@ -31,9 +28,6 @@ services:
   lsdserver:
     restart: unless-stopped
     image: lcslsdcontainer.azurecr.io/lsdserver:latest
-    volumes:
-        - ${WEBAPP_STORAGE_HOME}/data/files/storage:/data/files/storage
-        - ${WEBAPP_STORAGE_HOME}/data/files/encrypted:/data/files/encrypted
     user: root  # Add this line
     ports:
       - "8990:8990"
@@ -42,9 +36,6 @@ services:
 
   frontend:
     image: lcslsdcontainer.azurecr.io/frontend:latest
-    volumes:
-        - ${WEBAPP_STORAGE_HOME}/data/files/storage:/data/files/storage
-        - ${WEBAPP_STORAGE_HOME}/data/files/encrypted:/data/files/encrypted
     user: root  # Add this line
     ports:
       - "8991:8991"  # Adjust ports as needed
