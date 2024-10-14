@@ -20,6 +20,8 @@ services:
     restart: unless-stopped
     image: lcslsdcontainer.azurecr.io/lcpserver:latest
     user: root  # Add this line
+    security_opt:
+      - label:disable
     ports:
       - "8989:8989"
     volumes:
@@ -31,7 +33,9 @@ services:
   lsdserver:
     restart: unless-stopped
     image: lcslsdcontainer.azurecr.io/lsdserver:latest
-    user: root     
+    user: root  
+    security_opt:
+      - label:disable
     volumes:
       - shared-storage:/data/files/storage
       - shared-encrypted:/data/files/encrypted    
@@ -43,6 +47,8 @@ services:
   frontend:
     image: lcslsdcontainer.azurecr.io/frontend:latest
     user: root  # Add this line
+    security_opt:
+      - label:disable
     volumes:
       - shared-storage:/data/files/storage
       - shared-encrypted:/data/files/encrypted
@@ -50,6 +56,7 @@ services:
       - "8991:8991"  # Adjust ports as needed
     networks:
       - app-network
+      
 volumes:
   shared-storage:
   shared-encrypted:
