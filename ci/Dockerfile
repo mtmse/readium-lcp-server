@@ -88,3 +88,5 @@ LABEL org.opencontainers.image.source https://github.com/notalib/readium-lcp-ser
 EXPOSE 8991
 
 CMD ["/app/bin/frontend"]
+
+USER root
