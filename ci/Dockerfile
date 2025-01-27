@@ -15,7 +15,6 @@ RUN apt-get update && apt-get -y install build-essential && apt-get clean
 ENV CGO_CFLAGS="-D_LARGEFILE64_SOURCE"
 ENV CGO_ENABLED=1
 
-# Must be defined as ARG first to use. Inspiration from https://www.docker.com/blog/faster-multi-platform-builds-dockerfile-cross-compilation-guide/
 ARG TARGETOS TARGETARCH
 ENV GOOS=${TARGETOS}
 ENV GOARCH=${TARGETARCH}
@@ -23,7 +22,6 @@ ENV GOARCH=${TARGETARCH}
 RUN go build -o $GOPATH/bin/ ./lcpserver
 RUN go build -o $GOPATH/bin/ ./lsdserver
 RUN go build -o $GOPATH/bin/ ./lcpencrypt
-RUN go build -o $GOPATH/bin/ ./frontend
 
 #######################
 # Runtime image (LCP) #
@@ -32,18 +30,31 @@ FROM debian:bookworm-slim AS runtime-lcp
 LABEL org.opencontainers.image.source https://github.com/notalib/readium-lcp-server
 WORKDIR /app
 
-RUN apt update && apt install tzdata -y && apt clean
+RUN mkdir -p /mnt/cache
+RUN mkdir -p /data/files && chown -R 1001:1001 /data/files
 
-# To avoid .NET Culture issues, define Danish locale.
-ENV TZ="Europe/Copenhagen"
-ENV LANG="en_DK.UTF-8"
-ENV LC_ALL="en_DK.UTF-8"
+RUN apt-get update && \
+    apt-get install -y curl fuse3 lsb-release gnupg && \
+    apt-get clean
+
+# Download and install BlobFuse2 from the specified GitHub release
+RUN curl -fSL -o blobfuse2.deb https://github.com/Azure/azure-storage-fuse/releases/download/blobfuse2-2.3.2/blobfuse2-2.3.2-Ubuntu-22.04.x86_64.deb && \
+    dpkg -i blobfuse2.deb || apt-get install -f -y && \
+    rm blobfuse2.deb
+
+# Confirm BlobFuse2 installation
+RUN which blobfuse2 || echo "BlobFuse2 installation failed or not in PATH"
+
+# Set timezone and locale to Swedish (Sweden)
+ENV TZ="Europe/Stockholm"
+ENV LANG="sv_SE.UTF-8"
+ENV LC_ALL="sv_SE.UTF-8"
 
 # Add non-root user
 ARG UID=1001
 ARG GID=1001
 RUN groupadd --gid $GID app && \
-    adduser --disabled-password -gid $GID --uid $UID lcp
+	adduser --disabled-password --gid $GID --uid $UID lcp
 
 RUN mkdir -p /data/db && \
     mkdir -p /data/files && chown -R $UID:$GID /data
@@ -53,11 +64,18 @@ COPY --from=builder --chown=$UID:$GID /lcp/build/bin /app/bin
 COPY frontend /app/frontend
 RUN chmod -R 755 /app/frontend/manage
 
-# Copy in default localhost config and certs (override with volume-mapping at runtime).
+COPY --from=builder --chown=$UID:$GID /lcp/build/bin /app/bin
+COPY frontend /app/frontend
+RUN chmod -R 755 /app/frontend/manage
+
 COPY test/cert/cert-edrlab-test.pem /app/cert/edrlab.crt
 COPY test/cert/privkey-edrlab-test.pem /app/cert/edrlab.key
 COPY test/config.localhost.yaml /app/config.yaml
 COPY test/.htpasswd /app/.htpasswd
+
+COPY ./ci/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 # Update CA certificates
 RUN apt-get update && apt-get -y install ca-certificates && apt-get clean
@@ -66,6 +84,9 @@ RUN apt-get update && apt-get -y install ca-certificates && apt-get clean
 USER lcp
 
 # Mounted config.yaml decides which ports to use. This is the default from config.localhost.yml.
+USER root
+
+# Expose port for lcpserver
 EXPOSE 8989
 
 CMD ["/app/bin/lcpserver"]
@@ -76,17 +97,6 @@ CMD ["/app/bin/lcpserver"]
 FROM runtime-lcp AS runtime-lsd
 LABEL org.opencontainers.image.source https://github.com/notalib/readium-lcp-server
 
-# Mounted config.yaml decides which ports to use. This is the default from config.localhost.yml.
 EXPOSE 8990
 
 CMD ["/app/bin/lsdserver"]
-
-FROM runtime-lcp AS runtime-frontend
-LABEL org.opencontainers.image.source https://github.com/notalib/readium-lcp-server
-
-# Mounted config.yaml decides which ports to use. This is the default from config.localhost.yml.
-EXPOSE 8991
-
-CMD ["/app/bin/frontend"]
-
-USER root

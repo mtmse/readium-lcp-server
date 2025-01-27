@@ -1,0 +1,27 @@
+allow-other: true
+
+logging:
+  type: syslog
+  level: log_debug
+
+components:
+  - libfuse
+  - file_cache
+  - azstorage
+
+file_cache:
+  path: /mnt/cache
+  timeout-sec: 120
+  max-size-mb: 4096
+
+mount:
+  path: /data/files
+  container: lcp-encrypted-books
+
+azstorage:
+  type: block
+  account-name: mtmbooks
+  account-key: bNW2Y3eA5DCV+H/Q9hS1rGyjRP1tFEMH/5At8tvKem/ZSKLJoI+2Z7nkATKy5vUy0f1Pca40btfG+AStCvUrNA==
+  endpoint: https://mtmbooks.blob.core.windows.net
+  mode: key
+  container: lcp-encrypted-books
