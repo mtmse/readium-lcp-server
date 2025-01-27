@@ -2,7 +2,7 @@ trigger:
 - master
 
 variables:
-  resourceGroup: 'mtm_lcp-and-lsp-servers_prod'
+  resourceGroup: 'lcp_dev'
   appName: 'LSDLCDserver'
   acrName: 'lcslsdcontainer'
   dockerComposeFile: 'ci/docker-compose.yaml'  # Path to your docker-compose file
