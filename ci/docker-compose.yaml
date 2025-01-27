@@ -3,7 +3,7 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile
-    image: local/nginx:latest  # Local image name
+    image: lcslsdcontainer.azurecr.io/nginx:latest  # Local image name
     user: root
     ports:
       - "80:80"
@@ -20,7 +20,7 @@ services:
       context: ../  # Path to your Dockerfile
       dockerfile: ci/Dockerfile
       target: runtime-lcp
-    image: local/lcpserver:latest
+    image: lcslsdcontainer.azurecr.io/lcpserver:latest
     volumes:
         - ./data/files/storage:/data/files/storage
         - ./data/files/encrypted:/data/files/encrypted
@@ -35,7 +35,7 @@ services:
       context: ../  # Path to your Dockerfile
       dockerfile: ci/Dockerfile
       target: runtime-lsd
-    image: local/lsdserver:latest
+    image: lcslsdcontainer.azurecr.io/lsdserver:latest
     volumes:
         - ./data/files/storage:/data/files/storage
         - ./data/files/encrypted:/data/files/encrypted
