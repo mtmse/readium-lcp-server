@@ -29,15 +29,12 @@ lcp:
     # the port on which the License Server will be running
     port: 8989
     # replace this dsn if you're not using SQLite
-    database: "sqlite3://file:/data/db/lcp.sqlite?cache=shared&mode=rwc"
+    database: "mssql://server=tcp:merkur-dev-server.database.windows.net,1433;Initial Catalog=lcp_dev;Persist Security Info=False;User ID=merkur_admin;Password=GoTeam!!!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
     # authentication file of the License Server. Here we use the same file for the License Server and Status Server
     auth_file: "/app/.htpasswd"
 # uncomment if lcpencrypt does not manage the storage of encrypted publications
 storage:
-   filesystem:
-        directory: "/data/files/storage"
-   encrypted:
-        directory: "/data/files/encrypted"
+
 certificate:
     # theses test certificates are provided in the test/cert folder of the codebase
     cert: "/app/cert/edrlab.crt"
@@ -59,7 +56,7 @@ lsd:
     # the port on which the Status Server will be running
     port: 8990
     # replace this dsn if you're not using SQLite
-    database: "sqlite3://file:/data/db/lsd.sqlite?cache=shared&mode=rwc"
+    database: "mssql://server=tcp:merkur-dev-server.database.windows.net,1433;Initial Catalog=lcp_dev;Persist Security Info=False;User ID=merkur_admin;Password=GoTeam!!!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
     # authentication file of the Status Server. Here we use the same file for the License Server and Status Server
     auth_file: "/app/.htpasswd"
     # in this example, the License Gateway is developed so that adding a license id
@@ -74,15 +71,3 @@ license_status:
     return: true
     renting_days: 30
     renew_days: 7
-
-# Testing Frontend (not used yet)
-
-frontend:
-    host: "127.0.0.1"
-    port: 8991
-    database: "sqlite3://file:/data/db/frontend.sqlite?cache=shared&mode=rwc"
-    master_repository: "/data/files/master"
-    encrypted_repository: "/data/files/encrypted"
-    provider_uri: "https://localhost/download/"
-    right_print: 10
-    right_copy: 2000
