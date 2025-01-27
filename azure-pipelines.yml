@@ -35,28 +35,36 @@ stages:
             displayName: 'Build and Push Docker Compose Images'
 
   - stage: Deploy
-    displayName: Deploy to Azure App Service
+    displayName: Deploy to Azure Web App
     dependsOn: BuildAndPush
     jobs:
-      - deployment: Deploy
-        displayName: Deploy with Docker Compose
-        environment: 'developmentlcp'
+      - job: Deploy
+        displayName: Deploy Docker Compose App
         pool:
           vmImage: 'ubuntu-latest'
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - checkout: self
+        steps:
+          - checkout: self
 
-                # Deploy Docker Compose to Azure
-                - task: AzureWebAppContainer@1
-                  displayName: 'Deploy Docker Compose to Azure'
-                  inputs:
-                    azureSubscription: $(containerRegistry)
-                    appName: $(appName)
-                    multicontainerConfigFile: $(azureComposeFile)
-                    appSettings:
-                      -DOCKER_REGISTRY_SERVER_URL=$(registryUrl)
-                      -DOCKER_REGISTRY_SERVER_USERNAME=$(acrName)
-                      -DOCKER_REGISTRY_SERVER_PASSWORD=$(RegistrySecret)
+          # Login to Azure using AzureCLI
+          - task: AzureCLI@2
+            displayName: 'Login to Azure'
+            inputs:
+              azureSubscription: 'ACR-lcp'  # Azure service connection of type AzureRM
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az account show
+
+          # Deploy the Docker Compose file
+          - task: AzureCLI@2
+            displayName: 'Deploy Docker Compose to Azure'
+            inputs:
+              azureSubscription: 'ACR-lcp'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az webapp config container set \
+                  --name $(appName) \
+                  --resource-group $(resourceGroup) \
+                  --multicontainer-config-type compose \
+                  --multicontainer-config-file $(System.DefaultWorkingDirectory)/$(azureComposeFile)
