@@ -2,121 +2,45 @@ trigger:
 - master
 
 variables:
-  tag: $(Build.BuildId)
-  resourceGroup: 'mtm_lcp-and-lsp-servers_prod'  # Byt ut med ditt resursgruppnamn
+  resourceGroup: 'mtm_lcp-and-lsp-servers_prod'
   appName: 'LSDLCDserver'
-  acrName: 'lcslsdcontainer'  # Din ACR-namn
+  acrName: 'lcslsdcontainer'
+  dockerComposeFile: 'ci/docker-compose.yaml'  # Path to your docker-compose file
+  azureComposeFile: 'ci/docker-compose-azure.yaml'  # Path to your Azure-specific compose file
+  containerRegistry: 'docker_lcp'  # Azure service connection
+  registryUrl: 'lcslsdcontainer.azurecr.io'
 
 stages:
-  - stage: Build
-    displayName: Build and Push Docker Images
+  - stage: BuildAndPush
+    displayName: Build and Push with Docker Compose
     jobs:
       - job: Build
-        displayName: Build
+        displayName: Build and Push
         pool:
           vmImage: 'ubuntu-latest'
         steps:
           - checkout: self
 
-          # Logga in till ACR
+          # Log in to Azure Container Registry
           - task: Docker@2
             displayName: 'Login to ACR'
             inputs:
               command: 'login'
-              containerRegistry: 'docker_lcp'  # Din Azure service connection
+              containerRegistry: $(containerRegistry)
 
-          - task: Docker@2
-            displayName: 'Bygg nginx-bild'
-            inputs:
-              containerRegistry: 'docker_lcp'
-              command: 'build'
-              Dockerfile: 'ci/nginx/Dockerfile'
-              buildContext: 'ci/'
-              repository: 'nginx'
-              tags: 'latest'
-
-          # Pusha nginx-bild
-          - task: Docker@2
-            displayName: 'Pusha nginx-bild'
-            inputs:
-              containerRegistry: 'docker_lcp'
-              command: 'push'
-              repository: 'nginx'
-              tags: 'latest'
-
-          - task: Docker@2
-            displayName: 'Bygg lcpserver-bild'
-            inputs:
-              containerRegistry: 'docker_lcp'
-              command: 'build'
-              Dockerfile: 'ci/Dockerfile'
-              buildContext: './'
-              repository: 'lcpserver'
-              tags: 'latest'
-              arguments: '--target runtime-lcp'
-
-          # Pusha lcpserver-bild
-          - task: Docker@2
-            displayName: 'Pusha lcpserver-bild'
-            inputs:
-              containerRegistry: 'docker_lcp'
-              command: 'push'
-              repository: 'lcpserver'
-              tags: 'latest'
-
-          # Bygg lsdserver-bild
-          - task: Docker@2
-            displayName: 'Bygg lsdserver-bild'
-            inputs:
-              containerRegistry: 'docker_lcp'
-              command: 'build'
-              Dockerfile: 'ci/Dockerfile'
-              buildContext: './'
-              repository: 'lsdserver'
-              tags: 'latest'
-              arguments: '--target runtime-lsd'
-
-          # Pusha lsdserver-bild
-          - task: Docker@2
-            displayName: 'Pusha lsdserver-bild'
-            inputs:
-              containerRegistry: 'docker_lcp'
-              command: 'push'
-              repository: 'lsdserver'
-              tags: 'latest'
-          - task: Docker@2
-            displayName: 'Bygg frontend-bild'
-            inputs:
-              containerRegistry: 'docker_lcp'
-              command: 'build'
-              Dockerfile: 'ci/Dockerfile'
-              buildContext: './'
-              repository: 'frontend'
-              tags: 'latest'
-              arguments: '--target runtime-frontend'
-
-          # Pusha test-frontend-bild
-
-          - task: Docker@2
-            displayName: 'Pusha frontend-bild'
-            inputs:
-              containerRegistry: 'docker_lcp'
-              command: 'push'
-              repository: 'frontend'
-              tags: 'latest'
-              
-          # Lista Docker bilder för verifiering
-          - script: docker images
-            displayName: 'Lista Docker-bilder'
-
+          # Build and Push using Docker Compose
+          - script: |
+              docker-compose -f $(dockerComposeFile) build
+              docker-compose -f $(dockerComposeFile) push
+            displayName: 'Build and Push Docker Compose Images'
 
   - stage: Deploy
     displayName: Deploy to Azure App Service
-    dependsOn: Build
+    dependsOn: BuildAndPush
     jobs:
       - deployment: Deploy
-        displayName: Deploy
-        environment: 'developmentlcp'  # Eller skapa ett nytt miljö om nödvändigt
+        displayName: Deploy with Docker Compose
+        environment: 'developmentlcp'
         pool:
           vmImage: 'ubuntu-latest'
         strategy:
@@ -125,28 +49,14 @@ stages:
               steps:
                 - checkout: self
 
-                # Steg 1: Logga in till Azure (valfritt, användbart för ytterligare konfiguration)
-                - task: AzureCLI@2
-                  inputs:
-                    azureSubscription: 'ACR-lcp'  # Din Azure service connection
-                    scriptType: 'bash'
-                    scriptLocation: 'inlineScript'
-                    inlineScript: |
-                      # Om du behöver, logga in till Azure
-                      az account show
-
-                # Steg 3: Deploy Docker Compose till Azure App Service
+                # Deploy Docker Compose to Azure
                 - task: AzureWebAppContainer@1
-                  displayName: 'Deploy Docker Compose to Azure Web App'
+                  displayName: 'Deploy Docker Compose to Azure'
                   inputs:
-                    azureSubscription: 'ACR-lcp'  # Din Azure service connection
-                    appName: 'LSDLCDserver'  # Din Azure Web App
+                    azureSubscription: $(containerRegistry)
+                    appName: $(appName)
+                    multicontainerConfigFile: $(azureComposeFile)
                     appSettings:
-                      -DOCKER_REGISTRY_SERVER_USERNAME lcslsdcontainer
-                      -DOCKER_REGISTRY_SERVER_URL lcslsdcontainer.azurecr.io
-                      -DOCKER_REGISTRY_SERVER_PASSWORD $(RegistrySecret)
-                    containers: |
-                      lcslsdcontainer.azurecr.io/nginx:latest
-                      lcslsdcontainer.azurecr.io/lcpserver:latest
-                      lcslsdcontainer.azurecr.io/lsdserver:latest
-                    multicontainerConfigFile: 'ci/docker-compose-azure.yaml'  # Ange rätt sökväg till docker-compose.yml
+                      -DOCKER_REGISTRY_SERVER_URL=$(registryUrl)
+                      -DOCKER_REGISTRY_SERVER_USERNAME=$(acrName)
+                      -DOCKER_REGISTRY_SERVER_PASSWORD=$(RegistrySecret)
