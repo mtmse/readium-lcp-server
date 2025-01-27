@@ -2,7 +2,7 @@ services:
   nginx:
     build:
       context: ./nginx
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     image: lcslsdcontainer.azurecr.io/nginx:latest  # Local image name
     user: root
     ports:
@@ -18,7 +18,7 @@ services:
   lcpserver:
     build:
       context: ../  # Path to your Dockerfile
-      dockerfile: ci/Dockerfile
+      dockerfile: ci/Dockerfile.dev
       target: runtime-lcp
     image: lcslsdcontainer.azurecr.io/lcpserver:latest
     volumes:
@@ -33,7 +33,7 @@ services:
   lsdserver:
     build:
       context: ../  # Path to your Dockerfile
-      dockerfile: ci/Dockerfile
+      dockerfile: ci/Dockerfile.dev
       target: runtime-lsd
     image: lcslsdcontainer.azurecr.io/lsdserver:latest
     volumes:
