@@ -36,15 +36,7 @@ RUN mkdir -p /data/files && chown -R 1001:1001 /data/files
 RUN apt-get update && \
     apt-get install -y curl fuse3 lsb-release gnupg && \
     apt-get clean
-
-# Download and install BlobFuse2 from the specified GitHub release
-RUN curl -fSL -o blobfuse2.deb https://github.com/Azure/azure-storage-fuse/releases/download/blobfuse2-2.3.2/blobfuse2-2.3.2-Ubuntu-22.04.x86_64.deb && \
-    dpkg -i blobfuse2.deb || apt-get install -f -y && \
-    rm blobfuse2.deb
-
-# Confirm BlobFuse2 installation
-RUN which blobfuse2 || echo "BlobFuse2 installation failed or not in PATH"
-
+    
 # Set timezone and locale to Swedish (Sweden)
 ENV TZ="Europe/Stockholm"
 ENV LANG="sv_SE.UTF-8"
@@ -61,16 +53,10 @@ RUN mkdir -p /data/db && \
 
 # Copy over all bins, CMD can be changed at runtime.
 COPY --from=builder --chown=$UID:$GID /lcp/build/bin /app/bin
-COPY frontend /app/frontend
-RUN chmod -R 755 /app/frontend/manage
-
-COPY --from=builder --chown=$UID:$GID /lcp/build/bin /app/bin
-COPY frontend /app/frontend
-RUN chmod -R 755 /app/frontend/manage
 
 COPY test/cert/cert-edrlab-test.pem /app/cert/edrlab.crt
 COPY test/cert/privkey-edrlab-test.pem /app/cert/edrlab.key
-COPY test/config.localhost.yaml /app/config.yaml
+COPY ./config.dev.yaml /app/config.yaml
 COPY test/.htpasswd /app/.htpasswd
 
 # Update CA certificates
