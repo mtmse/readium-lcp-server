@@ -55,7 +55,7 @@ stages:
           - task: AzureCLI@2
             displayName: 'Login to Azure'
             inputs:
-              azureSubscription: 'ACR-lcp'  # Azure service connection of type AzureRM
+              azureSubscription: 'ACR-lcp2'  # Azure service connection of type AzureRM
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
               inlineScript: |
@@ -65,7 +65,7 @@ stages:
           - task: AzureCLI@2
             displayName: 'Deploy Docker Compose to Azure'
             inputs:
-              azureSubscription: 'ACR-lcp'
+              azureSubscription: 'ACR-lcp2'
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
               inlineScript: |
