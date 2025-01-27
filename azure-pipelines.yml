@@ -7,7 +7,7 @@ variables:
   acrName: 'lcslsdcontainer'
   dockerComposeFile: 'ci/docker-compose.yaml'  # Path to your docker-compose file
   azureComposeFile: 'ci/docker-compose-azure.yaml'  # Path to your Azure-specific compose file
-  containerRegistry: 'docker_lcp'  # Azure service connection
+  containerRegistry: 'docker_lcp2'  # Azure service connection
   registryUrl: 'lcslsdcontainer.azurecr.io'
 
 stages:
