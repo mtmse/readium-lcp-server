@@ -60,7 +60,6 @@ stages:
               inlineScript: |
                 az account show
 
-          # Deploy the Docker Compose file
           - task: AzureCLI@2
             displayName: 'Deploy Docker Compose to Azure'
             inputs:
@@ -68,8 +67,11 @@ stages:
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
               inlineScript: |
+                azureComposeFile="$(System.DefaultWorkingDirectory)/ci/docker-compose-azure.yaml"
+                echo "Using file: $azureComposeFile"
+                ls -l "$azureComposeFile"
                 az webapp config container set \
                   --name $(appName) \
                   --resource-group $(resourceGroup) \
                   --multicontainer-config-type compose \
-                  --multicontainer-config-file $(System.DefaultWorkingDirectory)/$(azureComposeFile)
+                  --multicontainer-config-file "$azureComposeFile"
