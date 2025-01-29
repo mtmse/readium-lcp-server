@@ -2,7 +2,7 @@ services:
   nginx:
     build:
       context: ./nginx
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     image: lcslsdcontainer.azurecr.io/nginx:latest  # Local image name
     user: root
     ports:
@@ -18,9 +18,11 @@ services:
   lcpserver:
     build:
       context: ../  # Path to your Dockerfile
-      dockerfile: ci/Dockerfile.dev
+      dockerfile: ci/Dockerfile
       target: runtime-lcp
     image: lcslsdcontainer.azurecr.io/lcpserver:latest
+    environment:
+      LCP_PUBLIC_BASE_URL: "http://127.0.0.1:8989"
     volumes:
         - ./data/files/storage:/data/files/storage
         - ./data/files/encrypted:/data/files/encrypted
@@ -33,9 +35,11 @@ services:
   lsdserver:
     build:
       context: ../  # Path to your Dockerfile
-      dockerfile: ci/Dockerfile.dev
+      dockerfile: ci/Dockerfile
       target: runtime-lsd
     image: lcslsdcontainer.azurecr.io/lsdserver:latest
+    environment:
+      LSD_PUBLIC_BASE_URL: "http://127.0.0.1:8989"
     volumes:
         - ./data/files/storage:/data/files/storage
         - ./data/files/encrypted:/data/files/encrypted
