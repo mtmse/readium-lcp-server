@@ -23,12 +23,11 @@ services:
     image: lcslsdcontainer.azurecr.io/lcpserver:latest
     volumes:
       - ./ci/config.yaml:/app/config.yaml:ro
+      - ./data/files/storage:/data/files/storage
+      - ./data/files/encrypted:/data/files/encrypted
     environment:
       LCP_PUBLIC_BASE_URL: "http://test.tes"
     entrypoint: ["/bin/sh", "/entrypoint.sh"]
-    volumes:
-        - ./data/files/storage:/data/files/storage
-        - ./data/files/encrypted:/data/files/encrypted
     user: root  # Add this line
     ports:
       - "8989:8989"
@@ -43,11 +42,10 @@ services:
     image: lcslsdcontainer.azurecr.io/lsdserver:latest
     volumes:
       - ./ci/config.yaml:/app/config.yaml:ro
+      - ./data/files/storage:/data/files/storage
+      - ./data/files/encrypted:/data/files/encrypted
     environment:
       LSD_PUBLIC_BASE_URL: "http://test.tes"
-    volumes:
-        - ./data/files/storage:/data/files/storage
-        - ./data/files/encrypted:/data/files/encrypted
     user: root  # Add this line
     ports:
       - "8990:8990"
