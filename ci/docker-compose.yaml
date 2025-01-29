@@ -22,7 +22,7 @@ services:
       target: runtime-lcp
     image: lcslsdcontainer.azurecr.io/lcpserver:latest
     environment:
-      LCP_PUBLIC_BASE_URL: "http://127.0.0.1:8989"
+      LCP_PUBLIC_BASE_URL: "http://test.tes"
     volumes:
         - ./data/files/storage:/data/files/storage
         - ./data/files/encrypted:/data/files/encrypted
@@ -39,7 +39,7 @@ services:
       target: runtime-lsd
     image: lcslsdcontainer.azurecr.io/lsdserver:latest
     environment:
-      LSD_PUBLIC_BASE_URL: "http://127.0.0.1:8989"
+      LSD_PUBLIC_BASE_URL: "http://test.tes"
     volumes:
         - ./data/files/storage:/data/files/storage
         - ./data/files/encrypted:/data/files/encrypted
