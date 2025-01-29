@@ -23,6 +23,7 @@ services:
     image: lcslsdcontainer.azurecr.io/lcpserver:latest
     environment:
       LCP_PUBLIC_BASE_URL: "http://test.tes"
+    entrypoint: ["/bin/sh", "/entrypoint.sh"]
     volumes:
         - ./data/files/storage:/data/files/storage
         - ./data/files/encrypted:/data/files/encrypted
