@@ -48,7 +48,6 @@ COPY --from=builder --chown=$UID:$GID /lcp/build/bin /app/bin
 
 COPY test/cert/cert-edrlab-test.pem /app/cert/edrlab.crt
 COPY test/cert/privkey-edrlab-test.pem /app/cert/edrlab.key
-COPY ci/config.yaml /app/config.yaml
 COPY test/.htpasswd /app/.htpasswd
 
 # Update CA certificates
