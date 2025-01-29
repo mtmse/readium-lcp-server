@@ -21,6 +21,8 @@ services:
       dockerfile: ci/Dockerfile
       target: runtime-lcp
     image: lcslsdcontainer.azurecr.io/lcpserver:latest
+    volumes:
+      - ./ci/config.yaml:/app/config.yaml:ro
     environment:
       LCP_PUBLIC_BASE_URL: "http://test.tes"
     entrypoint: ["/bin/sh", "/entrypoint.sh"]
@@ -39,6 +41,8 @@ services:
       dockerfile: ci/Dockerfile
       target: runtime-lsd
     image: lcslsdcontainer.azurecr.io/lsdserver:latest
+    volumes:
+      - ./ci/config.yaml:/app/config.yaml:ro
     environment:
       LSD_PUBLIC_BASE_URL: "http://test.tes"
     volumes:
