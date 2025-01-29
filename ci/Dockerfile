@@ -11,10 +11,6 @@ ENV GOPATH=/lcp/build
 
 RUN apt-get update && apt-get -y install build-essential && apt-get clean
 
-# Needed for sqlite3 lib
-ENV CGO_CFLAGS="-D_LARGEFILE64_SOURCE"
-ENV CGO_ENABLED=1
-
 ARG TARGETOS TARGETARCH
 ENV GOOS=${TARGETOS}
 ENV GOARCH=${TARGETARCH}
@@ -33,10 +29,6 @@ WORKDIR /app
 RUN mkdir -p /mnt/cache
 RUN mkdir -p /data/files && chown -R 1001:1001 /data/files
 
-RUN apt-get update && \
-    apt-get install -y curl fuse3 lsb-release gnupg && \
-    apt-get clean
-    
 # Set timezone and locale to Swedish (Sweden)
 ENV TZ="Europe/Stockholm"
 ENV LANG="sv_SE.UTF-8"
@@ -56,7 +48,7 @@ COPY --from=builder --chown=$UID:$GID /lcp/build/bin /app/bin
 
 COPY test/cert/cert-edrlab-test.pem /app/cert/edrlab.crt
 COPY test/cert/privkey-edrlab-test.pem /app/cert/edrlab.key
-COPY test/config.localhost.yaml /app/config.yaml
+COPY ci/config.yaml /app/config.yaml
 COPY test/.htpasswd /app/.htpasswd
 
 # Update CA certificates
