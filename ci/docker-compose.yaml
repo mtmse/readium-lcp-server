@@ -17,12 +17,12 @@ services:
 
   lcpserver:
     build:
-      context: ../  # Path to your Dockerfile
-      dockerfile: ci/Dockerfile
+      context: .  # Path to your Dockerfile
+      dockerfile: Dockerfile
       target: runtime-lcp
     image: lcslsdcontainer.azurecr.io/lcpserver:latest
     volumes:
-      - ./ci/config.yaml:/app/config.yaml:ro
+      - ./config.yaml:/app/config.yaml:ro
       - ./data/files/storage:/data/files/storage
       - ./data/files/encrypted:/data/files/encrypted
     environment:
@@ -36,12 +36,12 @@ services:
 
   lsdserver:
     build:
-      context: ../  # Path to your Dockerfile
-      dockerfile: ci/Dockerfile
+      context: .  # Path to your Dockerfile
+      dockerfile: Dockerfile
       target: runtime-lsd
     image: lcslsdcontainer.azurecr.io/lsdserver:latest
     volumes:
-      - ./ci/config.yaml:/app/config.yaml:ro
+      - ./config.yaml:/app/config.yaml:ro
       - ./data/files/storage:/data/files/storage
       - ./data/files/encrypted:/data/files/encrypted
     environment:
