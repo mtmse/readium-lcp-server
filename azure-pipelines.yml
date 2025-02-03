@@ -81,7 +81,7 @@ stages:
                 az webapp config appsettings set \
                   --name $(appName_dev) \
                   --resource-group $(resourceGroup_dev) \
-                  --settings DATABASE_URL=$(databaseUrl_dev)
+                  --settings DATABASE_URL="$(databaseUrl_dev)"
 
   - stage: Deploy_Prod
     displayName: Deploy to Prod
