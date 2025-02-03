@@ -45,7 +45,7 @@ RUN mkdir -p /data/db && \
 
 # Copy over all bins, CMD can be changed at runtime.
 COPY --from=builder --chown=$UID:$GID /lcp/build/bin /app/bin
-
+RUN ls -la /ci
 COPY test/cert/cert-edrlab-test.pem /app/cert/edrlab.crt
 COPY test/cert/privkey-edrlab-test.pem /app/cert/edrlab.key
 COPY test/.htpasswd /app/.htpasswd
