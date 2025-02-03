@@ -6,12 +6,10 @@ variables:
   appName_dev: 'LSDLCDserver'
   acrName_dev: 'lcslsdcontainer'
   databaseUrl_dev: $(DATABASE_URL_DEV)
-
   resourceGroup_prod: 'App-Merkur-Prod'
   appName_prod: 'app-lcp-prod'
   acrName_prod: 'lcslsdcontainer'
   databaseUrl_prod: $(DATABASE_URL_PROD)
-
   dockerComposeFile: 'ci/docker-compose.yaml'
   containerRegistry: 'docker_lcp'
 
@@ -78,7 +76,7 @@ stages:
                 ls -l "$azureComposeFile"
                 az webapp config container set \
                   --name $(appName-dev) \
-                  --resource-group $(_dev) \
+                  --resource-group $(resourceGroup_dev) \
                   --multicontainer-config-type compose \
                   --multicontainer-config-file "$azureComposeFile"
                   --env DATABASE_URL=$(databaseUrl_dev)
@@ -97,7 +95,7 @@ stages:
               inlineScript: |
                 az webapp config container set \
                   --name $(appName-prod)-prod \
-                  --resource-group $(resourceGroup-prod) \
+                  --resource-group $(resourceGroup_prod) \
                   --multicontainer-config-type compose \
                   --multicontainer-config-file $(System.DefaultWorkingDirectory)/$(azureComposeFile) \
                   --env DATABASE_URL=$(databaseUrl-prod)
