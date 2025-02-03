@@ -75,7 +75,7 @@ stages:
                 echo "Using file: $azureComposeFile"
                 ls -l "$azureComposeFile"
                 az webapp config container set \
-                  --name $(appName-dev) \
+                  --name $(appName_dev) \
                   --resource-group $(resourceGroup_dev) \
                   --multicontainer-config-type compose \
                   --multicontainer-config-file "$azureComposeFile"
@@ -94,7 +94,7 @@ stages:
               scriptLocation: 'inlineScript'
               inlineScript: |
                 az webapp config container set \
-                  --name $(appName-prod)-prod \
+                  --name $(appName_prod)-prod \
                   --resource-group $(resourceGroup_prod) \
                   --multicontainer-config-type compose \
                   --multicontainer-config-file $(System.DefaultWorkingDirectory)/$(azureComposeFile) \
