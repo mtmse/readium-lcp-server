@@ -5,7 +5,7 @@ FROM golang:1.22-bookworm AS builder
 
 WORKDIR /lcp
 
-COPY . /lcp/.
+COPY .. /lcp/.
 
 ENV GOPATH=/lcp/build
 
