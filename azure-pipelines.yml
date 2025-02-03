@@ -94,7 +94,7 @@ stages:
               scriptLocation: 'inlineScript'
               inlineScript: |
                 az webapp config container set \
-                  --name $(appName_prod)-prod \
+                  --name $(appName_prod) \
                   --resource-group $(resourceGroup_prod) \
                   --multicontainer-config-type compose \
                   --multicontainer-config-file $(System.DefaultWorkingDirectory)/$(azureComposeFile) \
