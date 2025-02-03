@@ -64,28 +64,25 @@ stages:
                 az account show
 
           - task: AzureCLI@2
-            displayName: 'Deploy Docker Compose to Azure - Dev'
+            displayName: 'Deploy Dev'
             inputs:
               azureSubscription: 'ACR-lcp'
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
               inlineScript: |
-                azureComposeFile="$(System.DefaultWorkingDirectory)/ci/docker-compose-azure.yaml"
-                echo "Using file: $azureComposeFile"
-                ls -l "$azureComposeFile"
-                
-                # Deploy Docker Compose App
+                echo "DATABASE_URL_DEV: $(databaseUrl_dev)"  # Debugging line
+
                 az webapp config container set \
                   --name $(appName_dev) \
                   --resource-group $(resourceGroup_dev) \
                   --multicontainer-config-type compose \
-                  --multicontainer-config-file "$azureComposeFile"
+                  --multicontainer-config-file $(System.DefaultWorkingDirectory)/$(azureComposeFile)
 
-                # Set environment variable separately
                 az webapp config appsettings set \
                   --name $(appName_dev) \
                   --resource-group $(resourceGroup_dev) \
                   --settings DATABASE_URL=$(databaseUrl_dev)
+
   - stage: Deploy_Prod
     displayName: Deploy to Prod
     dependsOn: Deploy
