@@ -106,4 +106,4 @@ stages:
                 az webapp config appsettings set \
                   --name $(appName_prod) \
                   --resource-group $(resourceGroup_prod) \
-                  --settings DATABASE_URL=$(databaseUrl_prod)
+                  --settings DATABASE_URL="$(databaseUrl_prod)"
