@@ -17,14 +17,14 @@ services:
 
   lcpserver:
     build:
-      context: .  # Path to your Dockerfile
-      dockerfile: Dockerfile
+      context: ..  # Path to your Dockerfile
+      dockerfile: ci/Dockerfile
       target: runtime-lcp
     image: lcslsdcontainer.azurecr.io/lcpserver:latest
     volumes:
-      - ./config.yaml:/app/config.yaml:ro
-      - ./data/files/storage:/data/files/storage
-      - ./data/files/encrypted:/data/files/encrypted
+      - ./ci/config.yaml:/app/config.yaml:ro
+      - ./ci/data/files/storage:/data/files/storage
+      - ./ci/data/files/encrypted:/data/files/encrypted
     environment:
       LCP_PUBLIC_BASE_URL: "http://test.tes"
     entrypoint: ["/bin/sh", "/entrypoint.sh"]
@@ -36,14 +36,14 @@ services:
 
   lsdserver:
     build:
-      context: .  # Path to your Dockerfile
-      dockerfile: Dockerfile
+      context: ..  # Path to your Dockerfile
+      dockerfile: ci/Dockerfile
       target: runtime-lsd
     image: lcslsdcontainer.azurecr.io/lsdserver:latest
     volumes:
-      - ./config.yaml:/app/config.yaml:ro
-      - ./data/files/storage:/data/files/storage
-      - ./data/files/encrypted:/data/files/encrypted
+      - ./ci/config.yaml:/app/config.yaml:ro
+      - ./ci/data/files/storage:/data/files/storage
+      - ./ci/data/files/encrypted:/data/files/encrypted
     environment:
       LSD_PUBLIC_BASE_URL: "http://test.tes"
     user: root  # Add this line
