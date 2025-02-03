@@ -97,5 +97,10 @@ stages:
                   --name $(appName_prod) \
                   --resource-group $(resourceGroup_prod) \
                   --multicontainer-config-type compose \
-                  --multicontainer-config-file $(System.DefaultWorkingDirectory)/$(azureComposeFile) \
-                  --env DATABASE_URL=$(databaseUrl-prod)
+                  --multicontainer-config-file $(System.DefaultWorkingDirectory)/$(azureComposeFile)
+
+                # Set environment variable separately
+                az webapp config appsettings set \
+                  --name $(appName_prod) \
+                  --resource-group $(resourceGroup_prod) \
+                  --settings DATABASE_URL=$(databaseUrl_prod)
