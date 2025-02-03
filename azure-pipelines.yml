@@ -2,12 +2,18 @@ trigger:
 - master
 
 variables:
-  resourceGroup: 'lcp_dev'
-  appName: 'LSDLCDserver'
-  acrName: 'lcslsdcontainer'
-  dockerComposeFile: 'ci/docker-compose.yaml'  # Path to your docker-compose file
-  containerRegistry: 'docker_lcp'  # Azure service connection
-  registryUrl: 'lcslsdcontainer.azurecr.io'
+  resourceGroup_dev: 'lcp_dev'
+  appName_dev: 'LSDLCDserver'
+  acrName_dev: 'lcslsdcontainer'
+  databaseUrl_dev: $(DATABASE_URL_DEV)
+
+  resourceGroup_prod: 'App-Merkur-Prod'
+  appName_prod: 'app-lcp-prod'
+  acrName_prod: 'lcslsdcontainer'
+  databaseUrl_prod: $(DATABASE_URL_PROD)
+
+  dockerComposeFile: 'ci/docker-compose.yaml'
+  containerRegistry: 'docker_lcp'
 
 stages:
   - stage: BuildAndPush
@@ -61,7 +67,7 @@ stages:
                 az account show
 
           - task: AzureCLI@2
-            displayName: 'Deploy Docker Compose to Azure'
+            displayName: 'Deploy Docker Compose to Azure - dev'
             inputs:
               azureSubscription: 'ACR-lcp'
               scriptType: 'bash'
@@ -71,7 +77,27 @@ stages:
                 echo "Using file: $azureComposeFile"
                 ls -l "$azureComposeFile"
                 az webapp config container set \
-                  --name $(appName) \
-                  --resource-group $(resourceGroup) \
+                  --name $(appName-dev) \
+                  --resource-group $(_dev) \
                   --multicontainer-config-type compose \
                   --multicontainer-config-file "$azureComposeFile"
+                  --env DATABASE_URL=$(databaseUrl_dev)
+  - stage: Deploy_Prod
+    displayName: Deploy to Prod
+    dependsOn: BuildAndPush
+    jobs:
+      - job: Deploy
+        steps:
+          - task: AzureCLI@2
+            displayName: 'Deploy Prod'
+            inputs:
+              azureSubscription: 'ACR-lcp-prod'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az webapp config container set \
+                  --name $(appName-prod)-prod \
+                  --resource-group $(resourceGroup-prod) \
+                  --multicontainer-config-type compose \
+                  --multicontainer-config-file $(System.DefaultWorkingDirectory)/$(azureComposeFile) \
+                  --env DATABASE_URL=$(databaseUrl-prod)
