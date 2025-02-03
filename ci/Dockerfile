@@ -49,6 +49,7 @@ COPY --from=builder --chown=$UID:$GID /lcp/build/bin /app/bin
 COPY test/cert/cert-edrlab-test.pem /app/cert/edrlab.crt
 COPY test/cert/privkey-edrlab-test.pem /app/cert/edrlab.key
 COPY test/.htpasswd /app/.htpasswd
+COPY ci/config.yaml /app/config.yaml
 
 # Update CA certificates
 RUN apt-get update && apt-get -y install ca-certificates && apt-get clean
