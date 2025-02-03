@@ -84,7 +84,7 @@ stages:
                   --env DATABASE_URL=$(databaseUrl_dev)
   - stage: Deploy_Prod
     displayName: Deploy to Prod
-    dependsOn: BuildAndPush
+    dependsOn: Deploy
     jobs:
       - job: Deploy
         steps:
