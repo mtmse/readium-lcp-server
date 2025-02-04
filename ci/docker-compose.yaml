@@ -25,7 +25,7 @@ services:
       - ./ci/config.yaml:/app/config.yaml:ro
       - ./ci/data/files/storage:/data/files/storage
       - ./ci/data/files/encrypted:/data/files/encrypted
-    entrypoint: ["/bin/sh", "./ci/entrypoint.sh"]
+    entrypoint: ["/bin/sh", "ci/entrypoint.sh"]
     user: root  # Add this line
     ports:
       - "8989:8989"
@@ -42,7 +42,7 @@ services:
       - ./ci/config.yaml:/app/config.yaml:ro
       - ./ci/data/files/storage:/data/files/storage
       - ./ci/data/files/encrypted:/data/files/encrypted
-    entrypoint: ["/bin/sh", "./ci/entrypoint.sh"]
+    entrypoint: ["/bin/sh", "ci/entrypoint.sh"]
     user: root  # Add this line
     ports:
       - "8990:8990"
