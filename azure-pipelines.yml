@@ -90,23 +90,27 @@ stages:
     displayName: Deploy to Prod
     dependsOn: Deploy
     jobs:
-      - job: Deploy
-        steps:
-          - task: AzureCLI@2
-            displayName: 'Deploy Prod'
-            inputs:
-              azureSubscription: 'ACR-lcp-prod'
-              scriptType: 'bash'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                az webapp config container set \
-                  --name $(appName_prod) \
-                  --resource-group $(resourceGroup_prod) \
-                  --multicontainer-config-type compose \
-                  --multicontainer-config-file $(System.DefaultWorkingDirectory)/$(dockerComposeFile)
-
-                # Set environment variable separately
-                az webapp config appsettings set \
-                  --name $(appName_prod) \
-                  --resource-group $(resourceGroup_prod) \
-                  --settings DATABASE_URL="$(databaseUrl_prod)"
+    - job: Deploy
+      steps:
+        - checkout: self
+        - task: AzureCLI@2
+          displayName: 'Deploy Prod'
+          inputs:
+            azureSubscription: 'ACR-lcp-prod'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              echo "Using file: $(System.DefaultWorkingDirectory)/$(dockerComposeFile)"
+              ls -l "$(System.DefaultWorkingDirectory)/$(dockerComposeFile)"
+              cat "$(System.DefaultWorkingDirectory)/$(dockerComposeFile)"
+              
+              az webapp config container set \
+                --name $(appName_prod) \
+                --resource-group $(resourceGroup_prod) \
+                --multicontainer-config-type compose \
+                --multicontainer-config-file "$(System.DefaultWorkingDirectory)/$(dockerComposeFile)"
+    
+              az webapp config appsettings set \
+                --name $(appName_prod) \
+                --resource-group $(resourceGroup_prod) \
+                --settings DATABASE_URL="$(databaseUrl_prod)"
