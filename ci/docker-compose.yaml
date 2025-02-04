@@ -21,10 +21,6 @@ services:
       dockerfile: ci/Dockerfile
       target: runtime-lcp
     image: lcslsdcontainer.azurecr.io/lcpserver:latest
-    volumes:
-      - ${WEBAPP_STORAGE_HOME}/ci/config.yaml:/app/config.yaml:ro
-      - ${WEBAPP_STORAGE_HOME}/ci/data/files/storage:/data/files/storage
-      - ${WEBAPP_STORAGE_HOME}/ci/data/files/encrypted:/data/files/encrypted
     entrypoint: ["/bin/sh", "ci/entrypoint.sh"]
     user: root
     ports:
@@ -38,10 +34,6 @@ services:
       dockerfile: ci/Dockerfile
       target: runtime-lsd
     image: lcslsdcontainer.azurecr.io/lsdserver:latest
-    volumes:
-      - ${WEBAPP_STORAGE_HOME}/ci/config.yaml:/app/config.yaml:ro
-      - ${WEBAPP_STORAGE_HOME}/ci/data/files/storage:/data/files/storage
-      - ${WEBAPP_STORAGE_HOME}/ci/data/files/encrypted:/data/files/encrypted
     entrypoint: ["/bin/sh", "ci/entrypoint.sh"]
     user: root
     ports:
