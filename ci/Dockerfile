@@ -51,6 +51,11 @@ COPY test/cert/privkey-edrlab-test.pem /app/cert/edrlab.key
 COPY test/.htpasswd /app/.htpasswd
 COPY ci/config.yaml /app/config.yaml
 
+COPY ci/entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+ENTRYPOINT ["/app/entrypoint.sh"]
+
 # Update CA certificates
 RUN apt-get update && apt-get -y install ca-certificates && apt-get clean
 
