@@ -19,7 +19,6 @@ services:
       dockerfile: ci/Dockerfile
       target: runtime-lcp
     image: lcslsdcontainer.azurecr.io/lcpserver:latest
-    entrypoint: ["/bin/sh", "ci/entrypoint.sh"]
     user: root
     ports:
       - "8989:8989"
@@ -32,7 +31,6 @@ services:
       dockerfile: ci/Dockerfile
       target: runtime-lsd
     image: lcslsdcontainer.azurecr.io/lsdserver:latest
-    entrypoint: ["/bin/sh", "ci/entrypoint.sh"]
     user: root
     ports:
       - "8990:8990"
