@@ -70,7 +70,7 @@ stages:
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
               inlineScript: |
-                echo "Using file: $(System.DefaultWorkingDirectory)/$(azureComposeFile)"
+                echo "Using file: $(azureComposeFile)"
                 ls -l "$(System.DefaultWorkingDirectory)/$(azureComposeFile)"
                 
                 # Set up the container configuration with the specified compose file
