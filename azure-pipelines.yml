@@ -94,16 +94,20 @@ stages:
       steps:
         - checkout: self
         - task: AzureCLI@2
+          displayName: 'Login to Azure'
+          inputs:
+            azureSubscription: 'ACR-lcp-prod'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              az account show
+        - task: AzureCLI@2
           displayName: 'Deploy Prod'
           inputs:
             azureSubscription: 'ACR-lcp-prod'
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
-              echo "Using file: $(System.DefaultWorkingDirectory)/$(dockerComposeFile)"
-              ls -l "$(System.DefaultWorkingDirectory)/$(dockerComposeFile)"
-              cat "$(System.DefaultWorkingDirectory)/$(dockerComposeFile)"
-              
               az webapp config container set \
                 --name $(appName_prod) \
                 --resource-group $(resourceGroup_prod) \
