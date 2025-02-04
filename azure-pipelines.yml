@@ -103,7 +103,7 @@ stages:
                   --name $(appName_prod) \
                   --resource-group $(resourceGroup_prod) \
                   --multicontainer-config-type compose \
-                  --multicontainer-config-file $(System.DefaultWorkingDirectory)/$(azureComposeFile)
+                  --multicontainer-config-file $(System.DefaultWorkingDirectory)/$(dockerComposeFile)
 
                 # Set environment variable separately
                 az webapp config appsettings set \
