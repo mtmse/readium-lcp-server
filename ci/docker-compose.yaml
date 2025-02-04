@@ -3,12 +3,12 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile
-    image: lcslsdcontainer.azurecr.io/nginx:latest  # Local image name
+    image: lcslsdcontainer.azurecr.io/nginx:latest  # Your image in ACR
     user: root
     ports:
       - "80:80"
     volumes:
-      - ${WEBAPP_STORAGE_HOME:-./nginx}/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ${WEBAPP_STORAGE_HOME}/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - lcpserver
       - lsdserver
@@ -17,16 +17,16 @@ services:
 
   lcpserver:
     build:
-      context: ..  # Path to your Dockerfile
+      context: ..  # This assumes your Dockerfile is in the ci folder and you're building from the repository root
       dockerfile: ci/Dockerfile
       target: runtime-lcp
     image: lcslsdcontainer.azurecr.io/lcpserver:latest
     volumes:
-      - ./ci/config.yaml:/app/config.yaml:ro
-      - ./ci/data/files/storage:/data/files/storage
-      - ./ci/data/files/encrypted:/data/files/encrypted
+      - ${WEBAPP_STORAGE_HOME}/ci/config.yaml:/app/config.yaml:ro
+      - ${WEBAPP_STORAGE_HOME}/ci/data/files/storage:/data/files/storage
+      - ${WEBAPP_STORAGE_HOME}/ci/data/files/encrypted:/data/files/encrypted
     entrypoint: ["/bin/sh", "ci/entrypoint.sh"]
-    user: root  # Add this line
+    user: root
     ports:
       - "8989:8989"
     networks:
@@ -34,16 +34,16 @@ services:
 
   lsdserver:
     build:
-      context: ..  # Path to your Dockerfile
+      context: ..  # Same as for lcpserver
       dockerfile: ci/Dockerfile
       target: runtime-lsd
     image: lcslsdcontainer.azurecr.io/lsdserver:latest
     volumes:
-      - ./ci/config.yaml:/app/config.yaml:ro
-      - ./ci/data/files/storage:/data/files/storage
-      - ./ci/data/files/encrypted:/data/files/encrypted
+      - ${WEBAPP_STORAGE_HOME}/ci/config.yaml:/app/config.yaml:ro
+      - ${WEBAPP_STORAGE_HOME}/ci/data/files/storage:/data/files/storage
+      - ${WEBAPP_STORAGE_HOME}/ci/data/files/encrypted:/data/files/encrypted
     entrypoint: ["/bin/sh", "ci/entrypoint.sh"]
-    user: root  # Add this line
+    user: root
     ports:
       - "8990:8990"
     networks:
