@@ -70,14 +70,17 @@ stages:
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
               inlineScript: |
-                echo "DATABASE_URL_DEV: $(databaseUrl_dev)"  # Debugging line
-
+                echo "Using file: $(System.DefaultWorkingDirectory)/$(azureComposeFile)"
+                ls -l "$(System.DefaultWorkingDirectory)/$(azureComposeFile)"
+                
+                # Set up the container configuration with the specified compose file
                 az webapp config container set \
                   --name $(appName_dev) \
                   --resource-group $(resourceGroup_dev) \
                   --multicontainer-config-type compose \
-                  --multicontainer-config-file $(System.DefaultWorkingDirectory)/$(azureComposeFile)
-
+                  --multicontainer-config-file "$(System.DefaultWorkingDirectory)/$(azureComposeFile)"
+                
+                # Set the database URL environment variable
                 az webapp config appsettings set \
                   --name $(appName_dev) \
                   --resource-group $(resourceGroup_dev) \
