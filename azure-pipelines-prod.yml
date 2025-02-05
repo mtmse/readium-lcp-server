@@ -1,0 +1,49 @@
+trigger:
+- master
+
+variables:
+  System.Debug: true
+  resourceGroup_prod: 'App-Lcp-Prod'
+  appName_prod: 'app-lcp-prod'
+  acrName_prod: 'lcslsdcontainer'
+  databaseUrl_prod: $(DATABASE_URL_PROD)
+  dockerComposeFile: 'ci/docker-compose.yaml'  # Ensure this path is correct
+  containerRegistry: 'docker_lcp'
+  tag: 'latest'
+
+stages:
+  - stage: BuildAndPush
+    displayName: Build and Push with Docker Compose
+    jobs:
+      - job: Build
+        displayName: Build and Push
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - checkout: self
+
+          - script: |
+              sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r .tag_name)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              sudo chmod +x /usr/local/bin/docker-compose
+              docker-compose --version
+            displayName: 'Install Docker Compose'
+
+          # Log in to Azure Container Registry
+          - task: Docker@2
+            displayName: 'Login to ACR'
+            inputs:
+              command: 'login'
+              containerRegistry: $(containerRegistry)
+
+          # Build and Push using Docker Compose
+          - script: |
+              docker-compose -f $(System.DefaultWorkingDirectory)/$(dockerComposeFile) build
+              docker-compose -f $(System.DefaultWorkingDirectory)/$(dockerComposeFile) push
+            displayName: 'Build and Push Docker Compose Images'
+
+          - task: AzureWebAppContainer@1
+            displayName: 'Azure Web App on Container Deploy'
+            inputs:
+              azureSubscription: 'ACR-lcp-prod'
+              appName: $(appName_prod)
+              multicontainerConfigFile: $(System.DefaultWorkingDirectory)/$(dockerComposeFile)
