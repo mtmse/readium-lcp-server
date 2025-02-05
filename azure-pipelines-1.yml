@@ -48,4 +48,4 @@ stages:
             inputs:
               azureSubscription: 'ACR-lcp-prod'
               appName: $(appName_prod)
-              containers: $(containerRegistry)/$(acrName_dev):$(tag)
+              multicontainerConfigFile: $(System.DefaultWorkingDirectory)/$(dockerComposeFile)
