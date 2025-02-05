@@ -51,7 +51,7 @@ stages:
         - task: AzureCLI@2
           displayName: 'Login to Azure'
           inputs:
-            azureSubscription: 'ACR-lcp-prod'
+            azureSubscription: 'sc-acr-lcp-prod'
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
@@ -59,7 +59,7 @@ stages:
         - task: AzureCLI@2
           displayName: 'Deploy Prod'
           inputs:
-            azureSubscription: 'ACR-lcp-prod'
+            azureSubscription: 'sc-acr-lcp-prod'
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
