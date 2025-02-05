@@ -41,9 +41,22 @@ stages:
               docker-compose -f $(System.DefaultWorkingDirectory)/$(dockerComposeFile) push
             displayName: 'Build and Push Docker Compose Images'
 
-          - task: AzureWebAppContainer@1
-            displayName: 'Azure Web App on Container Deploy'
+          - task: AzureCLI@2
+            displayName: 'Deploy Prod'
             inputs:
-              azureSubscription: 'ACR-lcp-prod'
-              appName: $(appName_prod)
-              multicontainerConfigFile: $(System.DefaultWorkingDirectory)/$(dockerComposeFile)
+              azureSubscription: 'ACR-lcp-prod'  # Ensure the correct Azure connection is used
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                # Deploy Docker Compose to the App Service
+                az webapp config container set \
+                  --name $(appName_prod) \
+                  --resource-group $(resourceGroup_prod) \
+                  --multicontainer-config-type compose \
+                  --multicontainer-config-file "$(System.DefaultWorkingDirectory)/$(dockerComposeFile)"
+                
+                # Set the app settings for DATABASE_URL
+                az webapp config appsettings set \
+                  --name $(appName_prod) \
+                  --resource-group $(resourceGroup_prod) \
+                  --settings DATABASE_URL="$(databaseUrl_prod)"
