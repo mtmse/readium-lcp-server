@@ -76,6 +76,8 @@ CMD ["/app/bin/lcpserver"]
 FROM runtime-lcp AS runtime-lsd
 LABEL org.opencontainers.image.source https://github.com/notalib/readium-lcp-server
 
+ENTRYPOINT ["/app/entrypoint.sh"]
+
 EXPOSE 8990
 
 CMD ["/app/bin/lsdserver"]
