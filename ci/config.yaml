@@ -14,7 +14,7 @@ profile: "basic"
 lcp:
     host: "127.0.0.1"
     # the public url a client app will use to access the License Server (optional)
-    public_base_url:  "http://lcpserver:8989"
+    public_base_url:  "http://localhost:8989"
     # the port on which the License Server will be running
     port: 8989
     # replace this dsn if you're not using SQLite
@@ -31,7 +31,7 @@ certificate:
 license:
     links:
         # leave the url as-is (after <LSD_SERVER> has been resolved)
-        status: "http://lcpserver:8990/licenses/{license_id}/status"
+        status: "http://localhost:8990/licenses/{license_id}/status"
         # the url of a REAL html page, that indicates how the user can get back his passphrase if forgotten
         hint: "https://localhost/lcp-hint"
 
@@ -41,7 +41,7 @@ license:
 lsd:
     host: "127.0.0.1"
     # the public url a client app will use to access the Status Server
-    public_base_url:  "http://lsdserver:8990"
+    public_base_url:  "http://localhost:8990"
     # the port on which the Status Server will be running
     port: 8990
     # replace this dsn if you're not using SQLite
@@ -52,7 +52,7 @@ lsd:
     # to the host name gives access to a fresh license.
     # Keep {license_id} as-is; this is a template.
     # Read the doc to know more about how to develop a License Gateway.
-    license_link_url: "http://lsdserver:8990/{license_id}"
+    license_link_url: "http://localhost:8990/{license_id}"
 license_status:
     register: true
     # uncomment the lines below if you're allowing e-lending
