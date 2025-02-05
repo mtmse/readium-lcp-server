@@ -4,7 +4,7 @@ trigger:
 variables:
   System.Debug: true
   resourceGroup_prod: 'App-Lcp-Prod'
-  appName_prod: 'app-lcp-prod'
+  appName_prod: 'app-lcplsd-prod'
   acrName_prod: 'lcslsdcontainer'
   databaseUrl_prod: $(DATABASE_URL_PROD)
   dockerComposeFile: 'ci/docker-compose.yaml'  # Ensure this path is correct
