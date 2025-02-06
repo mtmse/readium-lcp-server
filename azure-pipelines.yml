@@ -6,10 +6,17 @@ variables:
   appName_dev: 'LSDLCDserver'
   acrName_dev: 'lcslsdcontainer'
   databaseUrl_dev: $(DATABASE_URL_DEV)
-  resourceGroup_prod: 'App-Merkur-Prod'
-  appName_prod: 'app-lcp-prod'
+
+  resourceGroup_test: 'rg-lcp-test'
+  appName_test: 'app-lcplsd-test'
+  acrName_test: 'lcslsdcontainer'
+  databaseUrl_test: $(DATABASE_URL_TEST)
+
+  resourceGroup_prod: 'App-Lcp-Prod'
+  appName_prod: 'app-lcplsd-prod'
   acrName_prod: 'lcslsdcontainer'
   databaseUrl_prod: $(DATABASE_URL_PROD)
+
   dockerComposeFile: 'ci/docker-compose.yaml'
   containerRegistry: 'docker_lcp'
 
@@ -86,8 +93,8 @@ stages:
                   --resource-group $(resourceGroup_dev) \
                   --settings DATABASE_URL="$(databaseUrl_dev)"
 
-  - stage: Deploy_Prod
-    displayName: Deploy to Prod
+  - stage: Deploy_Test
+    displayName: Deploy to Test
     dependsOn: Deploy
     jobs:
     - job: Deploy
@@ -96,7 +103,40 @@ stages:
         - task: AzureCLI@2
           displayName: 'Login to Azure'
           inputs:
-            azureSubscription: 'ACR-lcp-prod'
+            azureSubscription: 'sc-acr-lcp-test'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              az account show
+        - task: AzureCLI@2
+          displayName: 'Deploy Test'
+          inputs:
+            azureSubscription: 'sc-acr-lcp-test'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              az webapp config container set \
+                --name $(appName_test) \
+                --resource-group $(resourceGroup_test) \
+                --multicontainer-config-type compose \
+                --multicontainer-config-file "$(System.DefaultWorkingDirectory)/$(dockerComposeFile)"
+    
+              az webapp config appsettings set \
+                --name $(appName_test) \
+                --resource-group $(resourceGroup_test) \
+                --settings DATABASE_URL="$(databaseUrl_test)"
+
+  - stage: Deploy_Prod
+    displayName: Deploy to Prod
+    dependsOn: Deploy_Test
+    jobs:
+    - job: Deploy
+      steps:
+        - checkout: self
+        - task: AzureCLI@2
+          displayName: 'Login to Azure'
+          inputs:
+            azureSubscription: 'sc-acr-lcp-prod'
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
@@ -104,7 +144,7 @@ stages:
         - task: AzureCLI@2
           displayName: 'Deploy Prod'
           inputs:
-            azureSubscription: 'ACR-lcp-prod'
+            azureSubscription: 'sc-acr-lcp-prod'
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
