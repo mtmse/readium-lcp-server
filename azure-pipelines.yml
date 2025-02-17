@@ -97,6 +97,17 @@ stages:
     displayName: Deploy to Test
     dependsOn: Deploy
     jobs:
+    - job: ManualApproval
+      displayName: 'Manual Approval for Test Deployment'
+      pool: server
+      steps:
+        - task: ManualValidation@0
+          displayName: 'Approve deployment to Test'
+          inputs:
+            instructions: 'Please review and approve the deployment to Test.'
+            onTimeout: 'reject'
+            notifyUsers: 'erik.johansson@mtm.se'
+          timeoutInMinutes: 60
     - job: Deploy
       steps:
         - checkout: self
