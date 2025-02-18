@@ -109,6 +109,7 @@ stages:
             notifyUsers: 'erik.johansson@mtm.se'
           timeoutInMinutes: 60
     - job: Deploy
+      dependsOn: ManualApproval
       steps:
         - checkout: self
         - task: AzureCLI@2
