@@ -33,7 +33,7 @@ license:
         # leave the url as-is (after <LSD_SERVER> has been resolved)
         status: "https://app-lcplsd-test.azurewebsites.net/lsdserver/licenses/{license_id}/status"
         # the url of a REAL html page, that indicates how the user can get back his passphrase if forgotten
-        hint: "https://localhost/lcp-hint"
+        hint: "https://www.legimus.se/anvaenda-legimus/kryptering-i-legimus"
 
 
 # LSD Server
