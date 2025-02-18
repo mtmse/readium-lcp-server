@@ -1,7 +1,7 @@
 lcp_update_auth:
     # login and password used by the Status Server to access the License Server
-    username: "ADMIN_PLACEHOLER"
-    password: "PASSWORD_PLACEHOLER"
+    username: "ADMIN_PLACEHOLDER"
+    password: "PASSWORD_PLACEHOLDER"
 
 lsd_notify_auth:
     # login and password used by the License Server to access the Status Server
