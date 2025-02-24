@@ -9,7 +9,7 @@ COPY . /lcp/.
 
 ENV GOPATH=/lcp/build
 
-RUN apt-get update && apt-get -y install build-essential && apt-get clean
+RUN apt-get update && apt-get -y install build-essential apache2-utils && apt-get clean
 
 ARG TARGETOS TARGETARCH
 ENV GOOS=${TARGETOS}
@@ -57,7 +57,7 @@ RUN chmod +x /app/entrypoint.sh
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 # Update CA certificates
-RUN apt-get update && apt-get -y install ca-certificates && apt-get clean
+RUN apt-get update && apt-get -y install apache2-utils ca-certificates && apt-get clean
 
 # Run as non-root LCP user
 USER lcp

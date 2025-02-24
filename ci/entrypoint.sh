@@ -2,6 +2,7 @@
 set -e
 
 CONFIG_FILE="/app/config.yaml"
+HTPASSWD_FILE="/app/.htpasswd"
 
 # Check if config.yaml exists
 if [ ! -f "$CONFIG_FILE" ]; then
@@ -9,47 +10,37 @@ if [ ! -f "$CONFIG_FILE" ]; then
     exit 1
 fi
 
-# Replace database connection string if environment variable is set
-if [ -n "$DATABASE_URL" ]; then
-    echo "🔧 Setting database connection string..."
-    sed -i "s|DATABASE_CONNECTION_PLACEHOLDER|$DATABASE_URL|g" "$CONFIG_FILE"
-else
-    echo "⚠️ Warning: No DATABASE_URL set. Using default in config.yaml."
-fi
+# Function to replace placeholders in the config file
+replace_placeholder() {
+    local placeholder="$1"
+    local value="$2"
+    local description="$3"
 
-if [ -n "$PASSWORD" ]; then
-    echo "🔧 Setting database connection string..."
-    sed -i "s|PASSWORD_PLACEHOLDER|$PASSWORD|g" "$CONFIG_FILE"
-else
-    echo "⚠️ Warning: No PASSWORD set. Using default in config.yaml."
-fi
+    if [ -n "$value" ]; then
+        echo "🔧 Setting $description..."
+        sed -i "s|$placeholder|$value|g" "$CONFIG_FILE"
+    else
+        echo "⚠️ Warning: No $description set. Using default in config.yaml."
+    fi
+}
 
-if [ -n "$ADMIN" ]; then
-    echo "🔧 Setting database connection string..."
-    sed -i "s|ADMIN_PLACEHOLDER|$ADMIN|g" "$CONFIG_FILE"
-else
-    echo "⚠️ Warning: No ADMIN set. Using default in config.yaml."
-fi
+# Replace placeholders with environment variable values
+replace_placeholder "DATABASE_CONNECTION_PLACEHOLDER" "$DATABASE_URL" "database connection string"
+replace_placeholder "PASSWORD_PLACEHOLDER" "$PASSWORD" "password"
+replace_placeholder "ADMIN_PLACEHOLDER" "$ADMIN" "admin username"
+replace_placeholder "LCP_URL_PLACEHOLDER" "$LCP_URL" "LCP URL"
+replace_placeholder "LSD_URL_PLACEHOLDER" "$LSD_URL" "LSD URL"
+replace_placeholder "HINT_URL_PLACEHOLDER" "$HINT_URL" "Hint URL"
 
-if [ -n "$LCP_URL" ]; then
-    echo "🔧 Setting database connection string..."
-    sed -i "s|LCP_URL_PLACEHOLDER|$LCP_URL|g" "$CONFIG_FILE"
+# Update .htpasswd file with ADMIN and PASSWORD environment variables
+if [ -n "$ADMIN" ] && [ -n "$PASSWORD" ]; then
+    echo "🔧 Updating .htpasswd file for user '$ADMIN'..."
+    # Ensure the .htpasswd file exists
+    touch "$HTPASSWD_FILE"
+    # Add or update the user in the .htpasswd file
+    htpasswd -bB "$HTPASSWD_FILE" "$ADMIN" "$PASSWORD"
 else
-    echo "⚠️ Warning: No LCP_URL set. Using default in config.yaml."
-fi
-
-if [ -n "$LSD_URL" ]; then
-    echo "🔧 Setting database connection string..."
-    sed -i "s|LSD_URL_PLACEHOLDER|$LSD_URL|g" "$CONFIG_FILE"
-else
-    echo "⚠️ Warning: No LSD_URL set. Using default in config.yaml."
-fi
-
-if [ -n "$HINT_URL" ]; then
-    echo "🔧 Setting database connection string..."
-    sed -i "s|HINT_URL_PLACEHOLDER|$HINT_URL|g" "$CONFIG_FILE"
-else
-    echo "⚠️ Warning: No HINT set. Using default in config.yaml."
+    echo "⚠️ Warning: ADMIN and/or PASSWORD environment variables not set. Skipping .htpasswd update."
 fi
 
 # Show final config
