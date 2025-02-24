@@ -86,12 +86,6 @@ stages:
                   --resource-group $(resourceGroup_dev) \
                   --multicontainer-config-type compose \
                   --multicontainer-config-file "$(System.DefaultWorkingDirectory)/$(dockerComposeFile)"
-                
-                # Set the database URL environment variable
-                az webapp config appsettings set \
-                  --name $(appName_dev) \
-                  --resource-group $(resourceGroup_dev) \
-                  --settings DATABASE_URL="$(databaseUrl_dev)"
 
   - stage: Deploy_Test
     displayName: Deploy to Test
@@ -132,11 +126,6 @@ stages:
                 --resource-group $(resourceGroup_test) \
                 --multicontainer-config-type compose \
                 --multicontainer-config-file "$(System.DefaultWorkingDirectory)/$(dockerComposeFile)"
-    
-              az webapp config appsettings set \
-                --name $(appName_test) \
-                --resource-group $(resourceGroup_test) \
-                --settings DATABASE_URL="$(databaseUrl_test)"
 
   - stage: Deploy_Prod
     displayName: Deploy to Prod
@@ -165,8 +154,3 @@ stages:
                 --resource-group $(resourceGroup_prod) \
                 --multicontainer-config-type compose \
                 --multicontainer-config-file "$(System.DefaultWorkingDirectory)/$(dockerComposeFile)"
-    
-              az webapp config appsettings set \
-                --name $(appName_prod) \
-                --resource-group $(resourceGroup_prod) \
-                --settings DATABASE_URL="$(databaseUrl_prod)"
