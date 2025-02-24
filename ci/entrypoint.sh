@@ -37,6 +37,8 @@ if [ -n "$ADMIN" ] && [ -n "$PASSWORD" ]; then
     echo "🔧 Updating .htpasswd file for user '$ADMIN'..."
     # Ensure the .htpasswd file exists
     touch "$HTPASSWD_FILE"
+
+    htpasswd -D "$HTPASSWD_FILE" "$ADMIN" 2>/dev/null || true
     # Add or update the user in the .htpasswd file
     htpasswd -bB "$HTPASSWD_FILE" "$ADMIN" "$PASSWORD"
     cat "$HTPASSWD_FILE"
