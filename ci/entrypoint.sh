@@ -38,7 +38,7 @@ if [ -n "$ADMIN" ] && [ -n "$PASSWORD" ]; then
     # Ensure the .htpasswd file exists
     touch "$HTPASSWD_FILE"
     # Remove existing entry for the user, if it exists
-    if htpasswd -D "$HTPASSWD_FILE" "$ADMIN" 2>/dev/null; then
+    if htpasswd -D "$HTPASSWD_FILE" "admin" 2>/dev/null; then
         echo "🗑️ Removed existing entry for user '$ADMIN'."
     else
         echo "ℹ️ No existing entry for user '$ADMIN' found. Proceeding to add."
