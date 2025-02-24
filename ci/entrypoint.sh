@@ -37,10 +37,16 @@ if [ -n "$ADMIN" ] && [ -n "$PASSWORD" ]; then
     echo "🔧 Updating .htpasswd file for user '$ADMIN'..."
     # Ensure the .htpasswd file exists
     touch "$HTPASSWD_FILE"
-
-    htpasswd -D "$HTPASSWD_FILE" "$ADMIN" 2>/dev/null || true
+    # Remove existing entry for the user, if it exists
+    if htpasswd -D "$HTPASSWD_FILE" "$ADMIN" 2>/dev/null; then
+        echo "🗑️ Removed existing entry for user '$ADMIN'."
+    else
+        echo "ℹ️ No existing entry for user '$ADMIN' found. Proceeding to add."
+    fi
     # Add or update the user in the .htpasswd file
     htpasswd -bB "$HTPASSWD_FILE" "$ADMIN" "$PASSWORD"
+    # Show .htpasswd file contents (for verification purposes; remove in production)
+    echo "📝 .htpasswd file contents:"
     cat "$HTPASSWD_FILE"
 else
     echo "⚠️ Warning: ADMIN and/or PASSWORD environment variables not set. Skipping .htpasswd update."
