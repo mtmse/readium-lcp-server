@@ -43,6 +43,9 @@ RUN groupadd --gid $GID app && \
 RUN mkdir -p /data/db && \
     mkdir -p /data/files && chown -R $UID:$GID /data
 
+# Update CA certificates
+RUN apt-get update && apt-get -y install apache2-utils ca-certificates && apt-get clean
+
 # Copy over all bins, CMD can be changed at runtime.
 COPY --from=builder --chown=$UID:$GID /lcp/build/bin /app/bin
 
@@ -55,9 +58,6 @@ COPY ci/entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
 ENTRYPOINT ["/app/entrypoint.sh"]
-
-# Update CA certificates
-RUN apt-get update && apt-get -y install apache2-utils ca-certificates && apt-get clean
 
 # Run as non-root LCP user
 USER lcp
