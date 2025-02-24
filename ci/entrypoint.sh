@@ -39,6 +39,7 @@ if [ -n "$ADMIN" ] && [ -n "$PASSWORD" ]; then
     touch "$HTPASSWD_FILE"
     # Add or update the user in the .htpasswd file
     htpasswd -bB "$HTPASSWD_FILE" "$ADMIN" "$PASSWORD"
+    cat "$HTPASSWD_FILE"
 else
     echo "⚠️ Warning: ADMIN and/or PASSWORD environment variables not set. Skipping .htpasswd update."
 fi
