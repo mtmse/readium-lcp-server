@@ -9,7 +9,7 @@ COPY . /lcp/.
 
 ENV GOPATH=/lcp/build
 
-RUN apt-get update && apt-get -y install build-essential && apt-get clean
+RUN apt-get update && apt-get -y install build-essential apache2-utils && apt-get clean
 
 ARG TARGETOS TARGETARCH
 ENV GOOS=${TARGETOS}
