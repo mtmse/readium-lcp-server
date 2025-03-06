@@ -51,7 +51,7 @@ lsd:
     # to the host name gives access to a fresh license.
     # Keep {license_id} as-is; this is a template.
     # Read the doc to know more about how to develop a License Gateway.
-    license_link_url: "https://merkur-prod.azurewebsites.net/lcp/{license_id}"
+    license_link_url: "MERKUR_URL_PLACEHOLDER/{license_id}"
 license_status:
     register: true
     # uncomment the lines below if you're allowing e-lending
