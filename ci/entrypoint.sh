@@ -31,6 +31,7 @@ replace_placeholder "ADMIN_PLACEHOLDER" "$ADMIN" "admin username"
 replace_placeholder "LCP_URL_PLACEHOLDER" "$LCP_URL" "LCP URL"
 replace_placeholder "LSD_URL_PLACEHOLDER" "$LSD_URL" "LSD URL"
 replace_placeholder "HINT_URL_PLACEHOLDER" "$HINT_URL" "Hint URL"
+replace_placeholder "MERKUR_URL_PLACEHOLDER" "$MERKUR_URL" "Merkur-URL"
 
 # Update .htpasswd file with ADMIN and PASSWORD environment variables
 if [ -n "$ADMIN" ] && [ -n "$PASSWORD" ]; then
