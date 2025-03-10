@@ -54,8 +54,7 @@ lsd:
     license_link_url: "MERKUR_URL_PLACEHOLDER/{license_id}"
 license_status:
     register: true
-    # uncomment the lines below if you're allowing e-lending
     renew: true
-    return: true
-    renting_days: 365
-    renew_days: 7
+    renew_days: 30
+    renting_days: 210
+    return: false
