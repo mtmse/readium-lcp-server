@@ -57,5 +57,5 @@ license_status:
     # uncomment the lines below if you're allowing e-lending
     renew: true
     return: true
-    renting_days: 30
+    renting_days: 365
     renew_days: 7
