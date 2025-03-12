@@ -8,7 +8,7 @@ if [ "$#" -ne 1 ]; then
 fi
 
 SECURE_FILE_PATH="$1"
-PATCHER_DIR="ci/patch/lcp-patcher-v1p2"
+PATCHER_DIR="ci/lcp-patcher-v1p2"
 LCP_SERVER_SRC="/lcp"    # Ändra om nödvändigt, sökvägen till din LCP-serverkod i byggmiljön.
 PLATFORM="linux-x64"      # Ändra till rätt plattform (ex. linux-x64, macos-x64, macos-arm64, windows-x64).
 

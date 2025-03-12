@@ -7,7 +7,7 @@ if [ "$#" -ne 1 ]; then
 fi
 
 SECURE_CERT_FILE="$1"
-EXTRACT_DIR="ci/patch/prod-certs"
+EXTRACT_DIR="ci/prod-certs"
 
 echo "Extraherar produktionscertifikat från: $SECURE_CERT_FILE"
 rm -rf "$EXTRACT_DIR"
