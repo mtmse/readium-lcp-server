@@ -32,9 +32,8 @@ mkdir -p "$DEST_CERT_DIR"
 
 # Hitta .pem- och .key-filerna (anpassa mönstret om filnamnen är specifika)
 CERT_FILE=$(find "$EXTRACT_DIR" -type f -name "*.pem" | head -n 1)
-KEY_FILE=$(find "$EXTRACT_DIR" -type f -name "*.key" | head -n 1)
 
-if [ -z "$CERT_FILE" ] || [ -z "$KEY_FILE" ]; then
+if [ -z "$CERT_FILE" ]; then
     echo "Kunde inte hitta certifikat- eller nyckelfil i $EXTRACT_DIR"
     exit 1
 fi
