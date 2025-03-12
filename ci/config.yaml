@@ -10,7 +10,7 @@ lsd_notify_auth:
 
 # LCP Server
 
-profile: "basic"
+profile: "1.0"
 lcp:
     host: "127.0.0.1"
     # the public url a client app will use to access the License Server (optional)
