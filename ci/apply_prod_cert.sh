@@ -25,7 +25,7 @@ fi
 echo "Extraktion klar."
 
 # Ange mappen där filerna ska kopieras
-DEST_CERT_DIR="test/cert"
+DEST_CERT_DIR="app/cert"
 mkdir -p "$DEST_CERT_DIR"
 
 # Hitta .pem-filerna (förväntar oss att det finns minst två)
@@ -41,8 +41,8 @@ CERT_FILE="${pem_files[0]}"
 KEY_FILE="${pem_files[1]}"
 
 echo "Kopierar certifikat från $CERT_FILE till $DEST_CERT_DIR/cert-provider-prod.pem"
-cp "$CERT_FILE" "$DEST_CERT_DIR/cert-provider-prod.pem"
+cp "$CERT_FILE" "$DEST_CERT_DIR/cert-mtm.pem"
 echo "Kopierar nyckel från $KEY_FILE till $DEST_CERT_DIR/privkey-provider-prod.pem"
-cp "$KEY_FILE" "$DEST_CERT_DIR/privkey-provider-prod.pem"
+cp "$KEY_FILE" "$DEST_CERT_DIR/privkey-mtm.pem"
 
 echo "Produktionscertifikat och nyckel har kopierats framgångsrikt!"
