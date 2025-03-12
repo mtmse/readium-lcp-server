@@ -43,8 +43,8 @@ stages:
 
           # Kör skriptet för att extrahera och kopiera certifikatfilerna
           - script: |
-              chmod +x ci/patch/apply_prod_cert.sh
-              ./ci/patch/apply_prod_cert.sh "$(prodCertSecureFile.secureFilePath)"
+              chmod +x $(System.DefaultWorkingDirectory)/ci/apply_prod_cert.sh
+              $(System.DefaultWorkingDirectory)/ci/apply_prod_cert.sh "$(prodCertSecureFile.secureFilePath)"
             displayName: "Apply Production Certificate"
             env:
               PROD_CERT_PASSWORD: $(PROD_CERT_PASSWORD)
