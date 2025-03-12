@@ -56,12 +56,14 @@ stages:
 
           # Kör patch-scriptet med sökvägen till den nedladdade filen
           - script: |
-              mkdir -p /lcp/license
+              sudo mkdir -p /lcp/license
+              sudo chmod -R 777 /lcp
               chmod +x $(System.DefaultWorkingDirectory)/ci/apply_lcp_patch.sh
               $(System.DefaultWorkingDirectory)/ci/apply_lcp_patch.sh "$(lcpPatcherArchive.secureFilePath)"
             displayName: "Apply LCP Patch using Secure File"
             env:
               LCP_PATCHER_PASSWORD: $(LCP_PATCHER_PASSWORD)
+
 
           - script: |
               sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r .tag_name)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
