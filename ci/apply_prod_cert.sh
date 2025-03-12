@@ -24,19 +24,21 @@ fi
 
 echo "Extraktion klar."
 
-# Förutsätt att arkivet innehåller ett .pem- och ett .key-fil.
-# Ange mappen där filerna ska kopieras. Här antar vi att du vill lägga dem i test/cert för att sedan
-# (vid behov) ändra Dockerfile eller config så att produktionsfilerna används.
+# Ange mappen där filerna ska kopieras
 DEST_CERT_DIR="test/cert"
 mkdir -p "$DEST_CERT_DIR"
 
-# Hitta .pem- och .key-filerna (anpassa mönstret om filnamnen är specifika)
-CERT_FILE=$(find "$EXTRACT_DIR" -type f -name "*.pem" | head -n 1)
-
-if [ -z "$CERT_FILE" ]; then
-    echo "Kunde inte hitta certifikat- eller nyckelfil i $EXTRACT_DIR"
+# Hitta .pem-filerna (förväntar oss att det finns minst två)
+pem_files=($(find "$EXTRACT_DIR" -type f -name "*.pem"))
+if [ ${#pem_files[@]} -lt 2 ]; then
+    echo "Kunde inte hitta två .pem filer i $EXTRACT_DIR"
     exit 1
 fi
+
+# Använd de två första .pem-filerna: 
+# Första filen antas vara certifikatet och andra filen den privata nyckeln.
+CERT_FILE="${pem_files[0]}"
+KEY_FILE="${pem_files[1]}"
 
 echo "Kopierar certifikat från $CERT_FILE till $DEST_CERT_DIR/cert-provider-prod.pem"
 cp "$CERT_FILE" "$DEST_CERT_DIR/cert-provider-prod.pem"
