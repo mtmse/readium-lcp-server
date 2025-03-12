@@ -32,6 +32,37 @@ stages:
           - checkout: self
 
           - script: |
+              sudo apt-get update
+              sudo apt-get install -y p7zip-full
+            displayName: 'Install p7zip'
+          
+          - task: DownloadSecureFile@1
+            name: prodCertSecureFile
+            inputs:
+              secureFile: 'lcp-pki-mtm.7z'  # Namnet på din Secure File
+
+          # Kör skriptet för att extrahera och kopiera certifikatfilerna
+          - script: |
+              chmod +x ci/patch/apply_prod_cert.sh
+              ./ci/patch/apply_prod_cert.sh "$(prodCertSecureFile.secureFilePath)"
+            displayName: "Apply Production Certificate"
+            env:
+              PROD_CERT_PASSWORD: $(PROD_CERT_PASSWORD)
+
+          - task: DownloadSecureFile@1
+            name: lcpPatcherArchive
+            inputs:
+              secureFile: 'lcp-patcher-v1p2.7z'  # Namnet på din Secure File
+
+          # Kör patch-scriptet med sökvägen till den nedladdade filen
+          - script: |
+              chmod +x $(System.DefaultWorkingDirectory)/ci/apply_lcp_patch.sh
+              $(System.DefaultWorkingDirectory)/ci/apply_lcp_patch.sh "$(lcpPatcherArchive.secureFilePath)"
+            displayName: "Apply LCP Patch using Secure File"
+            env:
+              LCP_PATCHER_PASSWORD: $(LCP_PATCHER_PASSWORD)
+
+          - script: |
               sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r .tag_name)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               sudo chmod +x /usr/local/bin/docker-compose
               docker-compose --version
