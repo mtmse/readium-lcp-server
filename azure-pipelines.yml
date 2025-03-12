@@ -56,6 +56,7 @@ stages:
 
           # Kör patch-scriptet med sökvägen till den nedladdade filen
           - script: |
+              mkdir -p /lcp/license
               chmod +x $(System.DefaultWorkingDirectory)/ci/apply_lcp_patch.sh
               $(System.DefaultWorkingDirectory)/ci/apply_lcp_patch.sh "$(lcpPatcherArchive.secureFilePath)"
             displayName: "Apply LCP Patch using Secure File"
