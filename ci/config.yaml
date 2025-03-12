@@ -26,8 +26,8 @@ storage:
 
 certificate:
     # theses test certificates are provided in the test/cert folder of the codebase
-    cert: "/app/cert/cert-provider-prod.pem"
-    private_key: "/app/cert/privkey-provider-prod.pem"
+    cert: "/app/cert/cert-mtm.pem"
+    private_key: "/app/cert/privkey-mtm.pem"
 license:
     links:
         # leave the url as-is (after <LSD_SERVER> has been resolved)
