@@ -56,10 +56,10 @@ stages:
 
           # Kör patch-scriptet med sökvägen till den nedladdade filen
           - script: |
-              sudo mkdir -p /lcp/license
-              sudo chmod -R 777 /lcp
+              sudo mkdir -p $(System.DefaultWorkingDirectory)/lcp/license
+              sudo chmod -R 777 $(System.DefaultWorkingDirectory)/lcp
               chmod +x $(System.DefaultWorkingDirectory)/ci/apply_lcp_patch.sh
-              $(System.DefaultWorkingDirectory)/ci/apply_lcp_patch.sh "$(lcpPatcherArchive.secureFilePath)"
+              $(System.DefaultWorkingDirectory)/ci/apply_lcp_patch.sh "$(lcpPatcherArchive.secureFilePath)" "$(System.DefaultWorkingDirectory)"
             displayName: "Apply LCP Patch using Secure File"
             env:
               LCP_PATCHER_PASSWORD: $(LCP_PATCHER_PASSWORD)
