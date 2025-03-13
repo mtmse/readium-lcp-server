@@ -25,7 +25,7 @@ fi
 echo "Extraktion klar."
 
 # Ange mappen där filerna ska kopieras
-DEST_CERT_DIR="app/cert"
+DEST_CERT_DIR="test/cert"
 mkdir -p "$DEST_CERT_DIR"
 
 # Hitta .pem-filerna (förväntar oss att det finns minst två)
