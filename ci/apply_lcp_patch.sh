@@ -1,16 +1,18 @@
 #!/bin/bash
 set -euo pipefail
 
-# Kontrollera att argumentet med sökvägen till secure-filen är med
-if [ "$#" -ne 1 ]; then
-  echo "Usage: $0 <path-to-secure-file>"
+# Förvänta oss att få både secure file path och LCP server source path
+if [ "$#" -ne 2 ]; then
+  echo "Usage: $0 <path-to-secure-file> <lcp-server-src>"
   exit 1
 fi
 
 SECURE_FILE_PATH="$1"
+LCP_SERVER_SRC="$2"
 PATCHER_DIR="ci/lcp-patcher-v1p2"
-LCP_SERVER_SRC="/lcp"    # Ändra om nödvändigt, sökvägen till din LCP-serverkod i byggmiljön.
-PLATFORM="linux-x64"      # Ändra till rätt plattform (ex. linux-x64, macos-x64, macos-arm64, windows-x64).
+PLATFORM="linux-x64"      # Ändra till rätt plattform om nödvändigt
+
+echo "Använder LCP server source: $LCP_SERVER_SRC"
 
 echo "Using secure file from: $SECURE_FILE_PATH"
 
