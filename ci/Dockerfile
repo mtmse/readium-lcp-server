@@ -51,6 +51,8 @@ COPY --from=builder --chown=$UID:$GID /lcp/build/bin /app/bin
 
 COPY test/cert/cert-edrlab-test.pem /app/cert/edrlab.crt
 COPY test/cert/privkey-edrlab-test.pem /app/cert/edrlab.key
+COPY test/cert/cert-mtm.pem /app/cert/cert-mtm.pem
+COPY test/cert/privkey-mtm.pem /app/cert/privkey-mtm.pem
 COPY test/.htpasswd /app/.htpasswd
 COPY ci/config.yaml /app/config.yaml
 
